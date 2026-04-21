@@ -1,0 +1,2824 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="Mental Health Care — Promoting mental health and emotional well-being in Colombia"/>
+<title>Mental Health Care Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700;1,800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700;1,9..144,900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
+:root{
+  --teal:#00b4b4;
+  --teal-d:#009898;
+  --teal-dd:#007878;
+  --teal-l:#00cfcf;
+  --teal-xl:#e0f7f7;
+  --yellow:#f5c800;
+  --yellow-l:#ffe566;
+  --yellow-xl:#fffacc;
+  --pink:#e8446a;
+  --pink-l:#ff7a98;
+  --white:#ffffff;
+  --dark:#13202b;
+  --dark-2:#1a2d3a;
+  --ink:#0d1a22;
+  --cream:#fffde8;
+  --gray:#f4f6f8;
+  --text-muted:rgba(13,26,34,.52);
+  --radius-sm:12px;
+  --radius:20px;
+  --radius-lg:32px;
+  --shadow:0 8px 32px rgba(0,0,0,.12);
+  --shadow-lg:0 20px 60px rgba(0,0,0,.18);
+  --transition:.28s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:'Plus Jakarta Sans','Nunito',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;cursor:default;}
+a{text-decoration:none;color:inherit;}
+img{display:block;width:100%;height:100%;object-fit:cover;}
+ul{list-style:none;}
+button{font-family:'Plus Jakarta Sans','Nunito',sans-serif;cursor:pointer;}
+a,button,[role="button"]{cursor:pointer;}
+
+/* ═══════════════════════════════════════════
+   MICRO-INTERACTIONS (subtle, professional)
+═══════════════════════════════════════════ */
+button,a,[role="button"]{
+  transition:transform var(--transition),opacity var(--transition);
+}
+/* No custom cursor elements needed */
+
+/* ═══════════════════════════════════════════
+   OVERLAY PANEL SYSTEM
+═══════════════════════════════════════════ */
+.panel-overlay{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,0);pointer-events:none;
+  transition:background .4s;
+}
+.panel-overlay.active{background:rgba(0,0,0,.45);pointer-events:all;}
+
+.side-panel{
+  position:fixed;top:0;right:-100%;bottom:0;z-index:700;
+  width:min(580px,95vw);
+  background:var(--dark);
+  overflow-y:auto;
+  transition:right .5s cubic-bezier(.25,.46,.45,.94);
+  box-shadow:-20px 0 60px rgba(0,0,0,.3);
+}
+.side-panel.open{right:0;}
+.panel-close{
+  position:absolute;top:1.2rem;right:1.5rem;
+  background:rgba(255,255,255,.08);border:none;
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.7);font-size:1.2rem;
+  transition:background var(--transition),transform var(--transition);
+  cursor:pointer;
+}
+.panel-close:hover{background:rgba(255,255,255,.16);transform:rotate(90deg);}
+.panel-inner{padding:4rem 2.5rem 3rem;}
+.panel-tag{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(0,180,180,.15);color:var(--teal-l);
+  font-size:.7rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;
+  padding:.35rem .9rem;border-radius:50px;margin-bottom:1.5rem;
+  border:1px solid rgba(0,180,180,.2);
+}
+.panel-h1{
+  font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3rem);
+  font-weight:900;color:var(--white);line-height:1;margin-bottom:.6rem;
+}
+.panel-h1 em{font-style:italic;color:var(--yellow);}
+.panel-sub{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.75;margin-bottom:2.5rem;}
+
+/* panel sections */
+.panel-sections{display:flex;flex-direction:column;gap:1.8rem;}
+.p-section{}
+.p-section-label{
+  font-size:.68rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:.9rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.p-section-label::before{content:'';width:20px;height:1.5px;background:var(--teal);}
+.p-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;}
+.p-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--radius-sm);padding:1.2rem;
+  transition:background var(--transition),transform var(--transition),border-color var(--transition);
+  cursor:pointer;position:relative;overflow:hidden;
+}
+.p-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,180,180,.1),transparent);
+  opacity:0;transition:opacity var(--transition);
+}
+.p-card:hover{background:rgba(0,180,180,.1);border-color:rgba(0,180,180,.25);transform:translateY(-3px);}
+.p-card:hover::before{opacity:1;}
+.p-card-icon{font-size:1.5rem;margin-bottom:.6rem;}
+.p-card h4{font-size:.92rem;font-weight:800;color:var(--white);margin-bottom:.3rem;}
+.p-card p{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.55;}
+.p-card-arrow{
+  position:absolute;top:.9rem;right:.9rem;
+  font-size:.8rem;color:var(--teal);opacity:0;
+  transition:opacity .2s,transform .2s;
+}
+.p-card:hover .p-card-arrow{opacity:1;transform:translate(2px,-2px);}
+
+/* team cards */
+.team-row{display:flex;flex-direction:column;gap:.7rem;}
+.team-item{
+  display:flex;gap:1rem;align-items:center;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--radius-sm);padding:.9rem 1.1rem;
+  transition:background var(--transition),transform var(--transition);cursor:pointer;
+}
+.team-item:hover{background:rgba(0,180,180,.1);transform:translateX(5px);}
+.team-item-icon{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(0,180,180,.15);border:1px solid rgba(0,180,180,.25);
+  display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;
+}
+.team-item strong{display:block;font-size:.88rem;font-weight:800;color:var(--white);}
+.team-item span{font-size:.76rem;color:rgba(255,255,255,.45);}
+
+/* gallery in panel */
+.panel-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;border-radius:var(--radius-sm);overflow:hidden;}
+.panel-gallery img{aspect-ratio:1;object-fit:cover;transition:transform .4s;cursor:pointer;}
+.panel-gallery img:hover{transform:scale(1.06);}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav{
+  position:fixed;inset:0 0 auto;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem 5%;
+  transition:background .4s,backdrop-filter .4s,box-shadow .4s;
+}
+nav.filled{
+  background:rgba(0,152,152,.96);
+  backdrop-filter:blur(16px);
+  box-shadow:0 2px 24px rgba(0,0,0,.14);
+}
+.nav-logo{
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:800;
+  color:var(--white);display:flex;align-items:center;gap:.6rem;cursor:pointer;
+  letter-spacing:-.01em;
+  transition:opacity .2s;
+}
+.nav-logo:hover{opacity:.85;}
+.nav-logo .logo-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;transition:background .2s;
+  border:1px solid rgba(255,255,255,.25);
+}
+.nav-logo:hover .logo-icon{background:rgba(255,255,255,.25);}
+.nav-logo .logo-text-wrap{display:flex;flex-direction:column;line-height:1.1;}
+.nav-logo .logo-main{font-size:.95rem;font-weight:800;letter-spacing:.01em;}
+.nav-logo .logo-sub{font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.65;}
+.nav-links{display:flex;gap:0;list-style:none;}
+.nav-links li a{
+  font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:rgba(255,255,255,.82);padding:.5rem 1rem;border-radius:8px;display:block;
+  transition:color .2s,background .2s;cursor:pointer;
+  position:relative;
+}
+.nav-links li a:hover{color:var(--white);background:rgba(255,255,255,.1);}
+.nav-links li a[aria-current="page"]{color:var(--yellow);}
+.nav-right{display:flex;align-items:center;gap:.7rem;}
+
+/* lang toggle */
+.lang-toggle{
+  display:flex;align-items:center;
+  background:rgba(255,255,255,.12);
+  border:1.5px solid rgba(255,255,255,.25);
+  border-radius:50px;overflow:hidden;padding:2px;
+  gap:2px;
+}
+.lb{
+  padding:.32rem .85rem;font-size:.7rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.55);background:transparent;border:none;
+  border-radius:50px;transition:color .2s,background .2s;cursor:pointer;
+}
+.lb.active{background:var(--yellow);color:var(--dark);}
+
+/* CTA buttons */
+.btn-participate{
+  background:var(--yellow);color:var(--dark);
+  padding:.5rem 1.4rem;border-radius:50px;
+  font-size:.8rem;font-weight:900;letter-spacing:.04em;
+  border:none;cursor:pointer;
+  box-shadow:0 4px 16px rgba(245,200,0,.35);
+  transition:transform .25s,box-shadow .25s,background .2s;
+  position:relative;overflow:hidden;
+}
+.btn-participate::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(255,255,255,.25);
+  transform:translateX(-100%);
+  transition:transform .35s;
+}
+.btn-participate:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(245,200,0,.45);}
+.btn-participate:hover::after{transform:translateX(100%);}
+.btn-participate:active{transform:scale(.97);}
+
+.btn-learn{
+  background:rgba(255,255,255,.15);color:var(--white);
+  padding:.5rem 1.4rem;border-radius:50px;
+  font-size:.8rem;font-weight:800;
+  border:1.5px solid rgba(255,255,255,.35);
+  cursor:pointer;
+  transition:background .2s,border-color .2s,transform .25s;
+}
+.btn-learn:hover{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);transform:translateY(-2px);}
+.btn-learn:active{transform:scale(.97);}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+#home{
+  min-height:100svh;background:var(--teal);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:90px 5% 0;text-align:center;
+}
+
+/* floating decorative shapes */
+.fs{position:absolute;pointer-events:none;will-change:transform;}
+.fs-1{top:16%;left:9%;width:52px;height:52px;border-radius:10px;background:var(--teal-l);animation:flt 4.2s ease-in-out infinite;}
+.fs-2{top:20%;left:50%;width:44px;height:44px;background:var(--pink);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);animation:flt 5.1s ease-in-out infinite .6s;}
+.fs-3{top:26%;right:10%;width:68px;height:68px;border-radius:60% 40% 30% 70%/60% 30% 70% 40%;background:var(--yellow);animation:blob 7s ease-in-out infinite;}
+.fs-4{bottom:35%;left:6%;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.25);animation:flt 3.8s ease-in-out infinite 1s;}
+.fs-5{bottom:40%;right:7%;width:28px;height:28px;background:var(--pink-l);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);animation:flt 4.8s ease-in-out infinite .3s;}
+@keyframes flt{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-18px) rotate(9deg)}}
+@keyframes blob{0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}50%{border-radius:30% 60% 70% 40%/50% 60% 30% 60%}}
+
+.hero-eyebrow{
+  font-size:.76rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.65);margin-bottom:1.6rem;opacity:0;
+}
+.hero-h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(3rem,8vw,7rem);
+  font-weight:900;line-height:.96;color:var(--white);
+  margin-bottom:2rem;position:relative;z-index:2;
+}
+.hero-h1 .ln{display:block;overflow:hidden;}
+.hero-h1 .wi{display:inline-block;transform:translateY(110%);}
+.hero-h1 em{font-style:italic;color:var(--yellow);}
+.hero-sub{
+  font-size:1.05rem;color:rgba(255,255,255,.78);
+  max-width:540px;margin:0 auto 2.5rem;line-height:1.8;
+  opacity:0;transform:translateY(20px);
+}
+.hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;opacity:0;transform:translateY(20px);margin-bottom:2rem;}
+.hero-cta-p{
+  background:var(--white);color:var(--teal-d);
+  padding:.9rem 2.2rem;border-radius:50px;
+  font-size:.9rem;font-weight:900;
+  box-shadow:0 6px 24px rgba(0,0,0,.18);
+  cursor:pointer;display:inline-flex;align-items:center;gap:.6rem;
+  border:none;
+  transition:transform .3s,box-shadow .3s,background .2s;
+  position:relative;overflow:hidden;
+}
+.hero-cta-p:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(0,0,0,.22);background:var(--yellow);}
+.hero-cta-p:active{transform:scale(.97);}
+.hero-cta-s{
+  background:transparent;color:var(--white);
+  padding:.9rem 2.2rem;border-radius:50px;
+  font-size:.9rem;font-weight:900;
+  border:2px solid rgba(255,255,255,.45);
+  cursor:pointer;
+  transition:border-color .2s,background .2s,transform .3s;
+}
+.hero-cta-s:hover{border-color:var(--white);background:rgba(255,255,255,.12);transform:translateY(-4px);}
+.hero-cta-s:active{transform:scale(.97);}
+
+.hero-chips{
+  display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;
+  opacity:0;transform:translateY(20px);margin-bottom:2.5rem;
+}
+.hero-chip{
+  background:rgba(255,255,255,.13);border:1.5px solid rgba(255,255,255,.25);
+  color:var(--white);padding:.38rem 1rem;border-radius:50px;
+  font-size:.78rem;font-weight:700;backdrop-filter:blur(4px);
+  cursor:pointer;transition:background .2s,transform .2s;
+}
+.hero-chip:hover{background:rgba(255,255,255,.24);transform:translateY(-2px);}
+
+/* HERO ILLUSTRATION */
+.hero-illo{width:100%;max-width:1200px;margin-top:auto;position:relative;z-index:2;opacity:0;}
+
+/* ═══════════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════════ */
+.mq-wrap{background:var(--yellow);padding:.75rem 0;overflow:hidden;}
+.mq-track{display:flex;white-space:nowrap;animation:mq 22s linear infinite;}
+.mq-track:hover{animation-play-state:paused;}
+@keyframes mq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.mq-item{
+  font-family:'Fraunces',serif;font-style:italic;font-size:1rem;font-weight:700;
+  color:var(--dark);padding:0 1.8rem;
+  display:inline-flex;align-items:center;gap:1.2rem;
+}
+.mq-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;}
+
+/* ═══════════════════════════════════════════
+   PHOTO SECTION (yellow)
+═══════════════════════════════════════════ */
+.photo-sec{background:var(--yellow);padding:5rem 5%;}
+.photo-sec-top{text-align:center;margin-bottom:3rem;}
+.section-eyebrow{
+  font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(19,32,43,.45);margin-bottom:.8rem;
+  display:flex;align-items:center;justify-content:center;gap:.8rem;
+}
+.section-eyebrow::before,.section-eyebrow::after{content:'';width:30px;height:1.5px;background:rgba(19,32,43,.25);}
+.sec-h2{
+  font-family:'Fraunces',serif;
+  font-size:clamp(2.2rem,5vw,4rem);
+  font-weight:900;line-height:1.05;
+}
+.sec-h2 em{font-style:italic;}
+.photo-grid{
+  display:grid;grid-template-columns:1.2fr 1fr 1fr;
+  grid-template-rows:auto auto;
+  gap:1rem;max-width:1100px;margin:0 auto;
+}
+.photo-item{
+  border-radius:var(--radius);overflow:hidden;
+  position:relative;cursor:pointer;
+  opacity:0;transform:translateY(40px);
+}
+.photo-item:first-child{grid-row:1/3;aspect-ratio:3/4;}
+.photo-item img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .7s cubic-bezier(.25,.46,.45,.94),filter .4s;
+}
+.photo-item:hover img{transform:scale(1.08);filter:brightness(1.05);}
+.photo-item-label{
+  position:absolute;bottom:1rem;left:1rem;
+  background:var(--yellow);color:var(--dark);
+  padding:.3rem .85rem;border-radius:50px;
+  font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  opacity:0;transform:translateY(5px);transition:opacity .3s,transform .3s;
+}
+.photo-item:hover .photo-item-label{opacity:1;transform:translateY(0);}
+.photo-item-zoom{
+  position:absolute;top:.9rem;right:.9rem;
+  background:rgba(0,0,0,.55);color:white;border-radius:50%;
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;opacity:0;transform:scale(.8);
+  transition:opacity .3s,transform .3s;pointer-events:none;
+  backdrop-filter:blur(4px);
+}
+.photo-item:hover .photo-item-zoom{opacity:1;transform:scale(1);}
+
+/* ═══════════════════════════════════════════
+   ABOUT SECTION (teal)
+═══════════════════════════════════════════ */
+#about{background:var(--teal);padding:6rem 5%;position:relative;overflow:hidden;}
+#about .section-eyebrow{color:rgba(255,255,255,.5);}
+#about .section-eyebrow::before,#about .section-eyebrow::after{background:rgba(255,255,255,.2);}
+#about .sec-h2{color:var(--white);}
+#about .sec-h2 em{color:var(--yellow);}
+#about::after{
+  content:'';position:absolute;top:-100px;right:-100px;
+  width:400px;height:400px;border-radius:50%;
+  background:rgba(255,255,255,.05);pointer-events:none;
+}
+.about-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;margin-top:4rem;max-width:1200px;}
+.about-photo-side{position:relative;}
+.about-main-img{border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);aspect-ratio:3/4;overflow:hidden;position:relative;z-index:1;}
+.about-accent-img{
+  position:absolute;bottom:-1.5rem;right:-1.5rem;
+  width:52%;aspect-ratio:1;border-radius:var(--radius);
+  overflow:hidden;border:5px solid var(--teal);
+  box-shadow:var(--shadow);z-index:2;
+}
+.about-blob-deco{
+  position:absolute;top:-1.5rem;left:-1.5rem;
+  width:90px;height:90px;border-radius:60% 40% 30% 70%/60% 30% 70% 40%;
+  background:var(--yellow);z-index:0;animation:blob 5s ease-in-out infinite;
+}
+.about-text-side{}
+.about-p{font-size:1rem;color:rgba(255,255,255,.75);line-height:1.82;margin-bottom:1rem;}
+.mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem;}
+.mv-card{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--radius-sm);padding:1.4rem;
+  border-top:3px solid var(--yellow);
+}
+.mv-card h3{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;color:var(--yellow);margin-bottom:.5rem;}
+.mv-card p{font-size:.82rem;color:rgba(255,255,255,.62);line-height:1.65;}
+.about-team-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:2rem;}
+.at-card{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-sm);padding:1.2rem;
+  opacity:0;transform:translateY(24px);
+  transition:background .25s,transform .25s;cursor:pointer;
+}
+.at-card:hover{background:rgba(255,255,255,.15);transform:translateY(-4px)!important;}
+.at-icon{font-size:1.5rem;margin-bottom:.5rem;}
+.at-card h4{font-size:.88rem;font-weight:800;color:var(--yellow);margin-bottom:.25rem;}
+.at-card p{font-size:.78rem;color:rgba(255,255,255,.58);line-height:1.55;}
+
+/* ═══════════════════════════════════════════
+   IMPACT / STATS SECTION (dark)
+═══════════════════════════════════════════ */
+.impact-sec{background:var(--dark);padding:5rem 5%;position:relative;overflow:hidden;}
+.impact-sec::before{
+  content:'';position:absolute;top:-80px;left:-80px;
+  width:400px;height:400px;border-radius:50%;
+  background:rgba(0,180,180,.06);pointer-events:none;
+}
+.impact-sec .section-eyebrow{color:rgba(255,255,255,.3);}
+.impact-sec .section-eyebrow::before,.impact-sec .section-eyebrow::after{background:rgba(255,255,255,.12);}
+.impact-sec .sec-h2{color:var(--white);}
+.impact-sec .sec-h2 em{color:var(--teal-l);}
+.impact-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:rgba(255,255,255,.05);
+  margin-top:3.5rem;border-radius:var(--radius);overflow:hidden;
+  max-width:1100px;
+}
+.impact-cell{
+  background:var(--dark);padding:2.5rem 1.5rem;text-align:center;
+  transition:background .25s;cursor:default;
+}
+.impact-cell:hover{background:var(--dark-2);}
+.impact-n{
+  font-family:'Fraunces',serif;font-size:3.5rem;font-weight:900;
+  color:var(--teal-l);line-height:1;display:block;margin-bottom:.5rem;
+}
+.impact-label{font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.6;}
+
+/* ═══════════════════════════════════════════
+   PROBLEM SECTION (dark)
+═══════════════════════════════════════════ */
+#problem{background:var(--dark-2);padding:6rem 5%;position:relative;overflow:hidden;}
+#problem .section-eyebrow{color:rgba(0,180,180,.6);}
+#problem .section-eyebrow::before,#problem .section-eyebrow::after{background:rgba(0,180,180,.25);}
+#problem .sec-h2{color:var(--white);}
+#problem .sec-h2 em{color:var(--yellow);}
+.prob-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;margin-top:4rem;align-items:start;max-width:1200px;}
+.prob-sub{font-size:1rem;color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:2rem;}
+.prob-list{display:flex;flex-direction:column;gap:1.4rem;}
+.prob-item{
+  display:flex;gap:1.2rem;align-items:flex-start;
+  padding:1.4rem;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--radius-sm);
+  opacity:0;transform:translateX(-30px);
+  transition:background .25s,border-color .25s;cursor:pointer;
+}
+.prob-item:hover{background:rgba(0,180,180,.07);border-color:rgba(0,180,180,.18);}
+.prob-num{
+  font-family:'Fraunces',serif;font-size:2.5rem;font-weight:900;
+  color:var(--teal);opacity:.22;line-height:1;flex-shrink:0;width:2rem;
+}
+.prob-body h4{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:.4rem;}
+.prob-body p{font-size:.84rem;color:rgba(255,255,255,.48);line-height:1.72;}
+.prob-right{position:relative;}
+.prob-big{
+  font-family:'Fraunces',serif;font-size:clamp(8rem,18vw,15rem);
+  font-weight:900;color:rgba(0,180,180,.07);line-height:1;
+  position:absolute;top:-3rem;right:-2rem;pointer-events:none;letter-spacing:-.02em;
+}
+.prob-photo{border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/5;margin-top:5rem;box-shadow:var(--shadow-lg);}
+
+/* ═══════════════════════════════════════════
+   ACTION SECTION (teal)
+═══════════════════════════════════════════ */
+#action{background:var(--teal);padding:6rem 5%;}
+#action .section-eyebrow{color:rgba(255,255,255,.45);}
+#action .section-eyebrow::before,#action .section-eyebrow::after{background:rgba(255,255,255,.2);}
+#action .sec-h2{color:var(--white);text-align:center;}
+#action .sec-h2 em{color:var(--yellow);}
+.action-sub{font-size:1rem;color:rgba(255,255,255,.65);text-align:center;max-width:520px;margin:0 auto 4rem;line-height:1.78;}
+
+/* hero duo cards */
+.action-duo{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;max-width:1100px;margin:0 auto 1.4rem;}
+.action-duo-card{
+  border-radius:var(--radius-lg);overflow:hidden;
+  cursor:pointer;min-height:460px;position:relative;
+  opacity:0;transform:translateY(40px);
+}
+.adc-media{position:absolute;inset:0;}
+.adc-media img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.25,.46,.45,.94);}
+.action-duo-card:hover .adc-media img{transform:scale(1.06);}
+.adc-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.72) 100%);}
+.adc-blob-bg{position:absolute;inset:0;background:var(--teal-d);display:flex;align-items:center;justify-content:center;}
+.adc-blob{position:absolute;inset:-15%;background:var(--teal);border-radius:60% 40% 30% 70%/60% 30% 70% 40%;animation:blob 7s ease-in-out infinite;}
+.adc-dots{position:absolute;inset:0;background:radial-gradient(circle,var(--yellow) 20%,transparent 21%) 0 0/28px 28px;opacity:.15;}
+.adc-icon-wrap{position:relative;z-index:2;width:80px;height:80px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 8px 32px rgba(0,0,0,.2);animation:blob 4s ease-in-out infinite;}
+.adc-content{position:absolute;bottom:0;left:0;right:0;padding:2.2rem;z-index:3;}
+.adc-tag{display:inline-block;background:var(--yellow);color:var(--dark);font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .85rem;border-radius:50px;margin-bottom:.8rem;}
+.adc-h3{font-family:'Fraunces',serif;font-size:1.9rem;font-weight:900;color:var(--white);line-height:1.1;margin-bottom:.5rem;}
+.adc-p{font-size:.87rem;color:rgba(255,255,255,.75);line-height:1.65;}
+
+/* mini action cards */
+.action-thirds{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:1100px;margin:0 auto;}
+.am-card{
+  background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.16);
+  border-radius:var(--radius);padding:1.8rem;
+  opacity:0;transform:translateY(28px);
+  transition:background .25s,transform .25s,border-color .25s;cursor:pointer;
+}
+.am-card:hover{background:rgba(255,255,255,.18);transform:translateY(-5px)!important;border-color:rgba(255,255,255,.3);}
+.am-icon{font-size:1.7rem;margin-bottom:.9rem;}
+.am-h4{font-size:1rem;font-weight:800;color:var(--yellow);margin-bottom:.7rem;}
+.am-ul{display:flex;flex-direction:column;gap:.3rem;}
+.am-ul li{font-size:.82rem;color:rgba(255,255,255,.65);display:flex;gap:.5rem;align-items:flex-start;line-height:1.5;}
+.am-ul li::before{content:'↗';color:var(--yellow);font-size:.7rem;flex-shrink:0;margin-top:.15rem;font-weight:900;}
+
+/* ═══════════════════════════════════════════
+   STATEMENT (yellow)
+═══════════════════════════════════════════ */
+.stmt-sec{background:var(--yellow);padding:5rem 5%;}
+.stmt-sec .section-eyebrow{color:rgba(19,32,43,.4);}
+.stmt-sec .section-eyebrow::before,.stmt-sec .section-eyebrow::after{background:rgba(19,32,43,.2);}
+.stmt-sec .sec-h2{color:var(--dark);text-align:center;margin-bottom:3rem;}
+.stmt-sec .sec-h2 em{color:var(--teal-d);}
+.stmt-photo-wrap{
+  max-width:960px;margin:0 auto;border-radius:var(--radius-lg);
+  overflow:hidden;box-shadow:var(--shadow-lg);position:relative;
+}
+.stmt-photo-wrap img{width:100%;aspect-ratio:16/7;object-fit:cover;}
+.stmt-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,152,152,.65) 0%,transparent 60%);}
+.stmt-quote{
+  position:absolute;bottom:2.5rem;left:2.5rem;
+  font-family:'Fraunces',serif;font-style:italic;font-size:1.7rem;font-weight:700;
+  color:var(--white);max-width:460px;line-height:1.25;
+  text-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+
+/* ═══════════════════════════════════════════
+   CONTACT (dark)
+═══════════════════════════════════════════ */
+#contact{background:var(--dark);padding:6rem 5%;}
+#contact .section-eyebrow{color:rgba(0,180,180,.5);}
+#contact .section-eyebrow::before,#contact .section-eyebrow::after{background:rgba(0,180,180,.2);}
+#contact .sec-h2{color:var(--white);}
+#contact .sec-h2 em{color:var(--yellow);}
+.contact-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:4rem;align-items:start;margin-top:4rem;max-width:1200px;}
+.contact-lines{display:flex;flex-direction:column;gap:.9rem;}
+.c-item{
+  display:flex;gap:1rem;align-items:center;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--radius-sm);padding:1.1rem 1.4rem;
+  opacity:0;transform:translateX(-25px);
+  transition:background .25s,border-color .25s,transform .25s;cursor:pointer;
+}
+.c-item:hover{background:rgba(0,180,180,.12);border-color:rgba(0,180,180,.25);transform:translateX(5px)!important;}
+.c-ico{font-size:1.2rem;flex-shrink:0;}
+.c-lbl{font-size:.66rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.32);display:block;margin-bottom:.18rem;}
+.c-item a,.c-item p{font-size:.93rem;color:var(--teal-l);font-weight:700;}
+.c-item a:hover{color:var(--yellow);}
+.crisis-card{
+  background:var(--teal);border-radius:var(--radius);padding:2rem;margin-top:.8rem;
+  position:relative;overflow:hidden;
+}
+.crisis-card::before{
+  content:'106';position:absolute;right:-1rem;bottom:-2rem;
+  font-family:'Fraunces',serif;font-size:8rem;font-weight:900;
+  color:rgba(0,0,0,.1);pointer-events:none;line-height:1;
+}
+.crisis-card h4{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:900;color:var(--white);margin-bottom:.55rem;}
+.crisis-card p{font-size:.87rem;color:rgba(255,255,255,.78);line-height:1.72;}
+
+/* AI PANEL */
+.ai-wrap{
+  background:rgba(255,255,255,.03);
+  border:1.5px solid rgba(0,180,180,.22);
+  border-radius:var(--radius);overflow:hidden;
+  opacity:0;transform:translateY(36px);
+}
+.ai-hd{
+  background:var(--teal-dd);padding:1.4rem 2rem;
+  display:flex;align-items:center;gap:.9rem;
+}
+.ai-status{display:flex;align-items:center;gap:.5rem;}
+.ai-pulse{
+  width:9px;height:9px;border-radius:50%;background:var(--yellow);
+  box-shadow:0 0 10px var(--yellow);animation:glow 2s infinite;
+}
+@keyframes glow{0%,100%{opacity:1;box-shadow:0 0 10px var(--yellow)}50%{opacity:.5;box-shadow:none}}
+.ai-title{font-family:'Fraunces',serif;font-size:1.08rem;font-weight:900;color:var(--white);}
+.ai-sub-text{font-size:.7rem;color:rgba(255,255,255,.5);}
+.ai-msgs{
+  height:290px;overflow-y:auto;
+  display:flex;flex-direction:column;gap:.85rem;
+  padding:1.4rem 1.8rem;
+  scrollbar-width:thin;scrollbar-color:rgba(0,180,180,.25) transparent;
+}
+.msg{max-width:88%;padding:.85rem 1.1rem;border-radius:14px;font-size:.86rem;line-height:1.65;}
+.msg.bot{background:rgba(0,180,180,.1);color:rgba(255,255,255,.88);align-self:flex-start;border-bottom-left-radius:3px;border:1px solid rgba(0,180,180,.18);}
+.msg.user{background:var(--teal-d);color:var(--white);align-self:flex-end;border-bottom-right-radius:3px;}
+.msg.typing{background:rgba(0,180,180,.1);align-self:flex-start;display:flex;gap:5px;align-items:center;padding:.85rem 1.1rem;border:1px solid rgba(0,180,180,.18);}
+.td{width:6px;height:6px;border-radius:50%;background:var(--yellow);animation:blink 1.2s infinite;}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.ai-chips-row{padding:.75rem 1.6rem;display:flex;gap:.45rem;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.04);}
+.ai-chip{
+  background:rgba(0,180,180,.1);color:rgba(255,255,255,.62);
+  border:1px solid rgba(0,180,180,.2);border-radius:50px;
+  padding:.27rem .78rem;font-size:.72rem;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-weight:700;
+  transition:background .2s,color .2s,transform .2s;
+}
+.ai-chip:hover{background:rgba(0,180,180,.25);color:var(--white);transform:translateY(-2px);}
+.ai-chip:active{transform:scale(.96);}
+.ai-input-area{padding:1rem 1.5rem 1.5rem;display:flex;gap:.65rem;}
+.ai-in{
+  flex:1;background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(0,180,180,.22);border-radius:50px;
+  padding:.72rem 1.2rem;color:var(--white);
+  font-size:.86rem;font-family:'Nunito',sans-serif;font-weight:600;
+  outline:none;
+  transition:border-color .2s,background .2s;
+}
+.ai-in::placeholder{color:rgba(255,255,255,.25);}
+.ai-in:focus{border-color:var(--teal-l);background:rgba(0,180,180,.08);}
+.ai-send{
+  background:var(--yellow);border:none;cursor:pointer;
+  width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,transform .2s;flex-shrink:0;
+}
+.ai-send:hover{background:var(--yellow-l);transform:scale(1.1);}
+.ai-send:active{transform:scale(.94);}
+.ai-send svg{width:17px;height:17px;fill:var(--dark);}
+
+/* ═══════════════════════════════════════════
+   IMAGE MODAL
+═══════════════════════════════════════════ */
+#img-modal{
+  position:fixed;inset:0;z-index:800;
+  background:rgba(0,0,0,0);
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+  transition:background .35s;
+  padding:1.5rem;
+}
+#img-modal.open{background:rgba(0,0,0,.88);pointer-events:all;}
+#img-modal-inner{
+  position:relative;
+  max-width:min(92vw,1000px);max-height:90vh;
+  border-radius:var(--radius-lg);overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,.5);
+  transform:scale(.88);opacity:0;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .35s;
+}
+#img-modal.open #img-modal-inner{transform:scale(1);opacity:1;}
+#img-modal-img{width:100%;max-height:85vh;object-fit:contain;display:block;border-radius:var(--radius-lg);}
+#img-modal-caption{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,.75));
+  padding:2rem 1.5rem 1.2rem;
+  font-family:'Fraunces',serif;font-style:italic;
+  color:white;font-size:1.05rem;text-align:center;
+}
+/* Close button — inside modal, always visible when open */
+#img-modal-close{
+  position:absolute;top:1rem;right:1rem;
+  background:rgba(0,0,0,.55);border:1.5px solid rgba(255,255,255,.4);
+  color:white;width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;font-weight:700;cursor:pointer;z-index:10;
+  transition:background .2s,transform .2s;
+  backdrop-filter:blur(8px);
+  flex-shrink:0;
+}
+#img-modal-close:hover{background:rgba(0,0,0,.8);transform:rotate(90deg) scale(1.1);}
+/* Nav arrows — inside modal overlay, pointer-events only when open */
+#img-modal-nav{
+  position:absolute;top:50%;left:0;right:0;
+  display:flex;justify-content:space-between;
+  pointer-events:all;padding:0 .7rem;
+  transform:translateY(-50%);
+  z-index:9;
+}
+.img-nav-btn{
+  background:rgba(0,0,0,.45);border:1.5px solid rgba(255,255,255,.3);
+  color:white;width:46px;height:46px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;cursor:pointer;pointer-events:all;
+  transition:background .2s,transform .2s;backdrop-filter:blur(8px);
+}
+.img-nav-btn:hover{background:rgba(0,0,0,.75);transform:scale(1.1);}
+@media(max-width:768px){
+  #img-modal{padding:.5rem;}
+  #img-modal-inner{max-width:100vw;max-height:100svh;border-radius:var(--radius);}
+  #img-modal-close{width:48px;height:48px;font-size:1.3rem;top:.6rem;right:.6rem;}
+  .img-nav-btn{width:42px;height:42px;font-size:1rem;}
+  #img-modal-nav{padding:0 .4rem;}
+}
+
+/* ═══════════════════════════════════════════
+   COMMUNITY SECTION
+═══════════════════════════════════════════ */
+#community{background:var(--cream);padding:6rem 5%;position:relative;overflow:hidden;}
+#community::before{
+  content:'';position:absolute;top:-150px;right:-150px;
+  width:500px;height:500px;border-radius:50%;
+  background:var(--teal-xl);pointer-events:none;
+}
+#community .section-eyebrow{color:rgba(19,32,43,.4);}
+#community .section-eyebrow::before,#community .section-eyebrow::after{background:rgba(19,32,43,.2);}
+#community .sec-h2{color:var(--dark);}
+#community .sec-h2 em{color:var(--teal-d);}
+.community-intro{font-size:1rem;color:var(--text-muted);max-width:600px;line-height:1.8;margin:1rem 0 3rem;}
+.community-gallery{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  grid-auto-rows:220px;
+  gap:1rem;max-width:1100px;margin:0 auto 3rem;
+}
+.cm-photo{
+  border-radius:var(--radius);overflow:hidden;position:relative;
+  cursor:pointer;transition:transform .35s cubic-bezier(.25,.46,.45,.94),box-shadow .35s;
+}
+.cm-photo:nth-child(1){grid-column:1/3;grid-row:1/3;}
+.cm-photo:hover{transform:translateY(-5px);box-shadow:0 24px 48px rgba(0,0,0,.18);}
+.cm-photo img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease,filter .4s;}
+.cm-photo:hover img{transform:scale(1.07);filter:brightness(1.05);}
+.cm-photo-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.55) 100%);
+  opacity:0;transition:opacity .35s;
+}
+.cm-photo:hover .cm-photo-overlay{opacity:1;}
+.cm-photo-label{
+  position:absolute;bottom:.9rem;left:1rem;right:1rem;
+  color:white;font-weight:800;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;
+  opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;
+}
+.cm-photo:hover .cm-photo-label{opacity:1;transform:translateY(0);}
+.cm-photo-zoom{
+  position:absolute;top:.8rem;right:.8rem;
+  background:rgba(255,255,255,.2);backdrop-filter:blur(6px);
+  border-radius:50%;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  color:white;font-size:.8rem;
+  opacity:0;transform:scale(.7);transition:opacity .3s,transform .3s;
+}
+.cm-photo:hover .cm-photo-zoom{opacity:1;transform:scale(1);}
+
+/* Community Testimonials */
+.community-testimonials{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.2rem;max-width:1100px;margin:0 auto 3rem;
+}
+.cm-testimonial{
+  background:white;border-radius:var(--radius);padding:1.8rem;
+  box-shadow:0 4px 24px rgba(0,0,0,.07);
+  border-left:4px solid var(--teal);
+  transition:transform .3s,box-shadow .3s;
+}
+.cm-testimonial:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,.12);}
+.cm-testimonial-text{
+  font-family:'Fraunces',serif;font-style:italic;font-size:.98rem;
+  color:var(--dark);line-height:1.7;margin-bottom:1.1rem;
+}
+.cm-testimonial-author{display:flex;align-items:center;gap:.7rem;}
+.cm-testimonial-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--teal);display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;
+}
+.cm-testimonial-name{font-size:.82rem;font-weight:800;color:var(--dark);}
+.cm-testimonial-role{font-size:.72rem;color:var(--text-muted);}
+
+/* Community events */
+.community-events{max-width:1100px;margin:0 auto;}
+.cm-events-title{
+  font-family:'Fraunces',serif;font-size:1.7rem;font-weight:900;
+  color:var(--dark);margin-bottom:1.4rem;
+}
+.cm-events-title em{color:var(--teal-d);font-style:italic;}
+.cm-events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.cm-event{
+  background:white;border-radius:var(--radius);overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+  transition:transform .3s,box-shadow .3s;cursor:pointer;
+}
+.cm-event:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,.15);}
+.cm-event-img{height:160px;overflow:hidden;}
+.cm-event-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+.cm-event:hover .cm-event-img img{transform:scale(1.07);}
+.cm-event-body{padding:1.3rem;}
+.cm-event-date{
+  font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:.4rem;
+}
+.cm-event-name{font-size:.95rem;font-weight:800;color:var(--dark);margin-bottom:.3rem;}
+.cm-event-desc{font-size:.78rem;color:var(--text-muted);line-height:1.6;}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer{background:var(--ink);padding:4.5rem 5% 2.5rem;overflow:hidden;position:relative;}
+footer::after{content:'';position:absolute;bottom:-60px;right:-60px;width:260px;height:260px;border-radius:50%;background:rgba(0,180,180,.05);pointer-events:none;}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:3rem;max-width:1200px;margin-bottom:3rem;}
+.footer-logo{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:900;color:var(--white);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+.footer-logo span{color:var(--yellow);}
+.footer-tagline{font-family:'Fraunces',serif;font-style:italic;font-size:.96rem;color:rgba(255,255,255,.38);line-height:1.7;max-width:270px;}
+.footer-col h5{font-size:.68rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:1rem;}
+.footer-col li{margin-bottom:.6rem;}
+.footer-col a{font-size:.87rem;color:rgba(255,255,255,.52);transition:color .2s;cursor:pointer;}
+.footer-col a:hover{color:var(--yellow);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.07);padding-top:1.8rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:1200px;}
+.footer-copy{font-size:.76rem;color:rgba(255,255,255,.28);}
+.footer-soc{display:flex;gap:1.4rem;}
+.footer-soc a{font-size:.78rem;color:rgba(255,255,255,.38);transition:color .2s;cursor:pointer;}
+.footer-soc a:hover{color:var(--yellow);}
+
+/* ═══════════════════════════════════════════
+   REVEAL HELPERS
+═══════════════════════════════════════════ */
+.rv{opacity:0;transform:translateY(44px);}
+.rv-l{opacity:0;transform:translateX(-44px);}
+.rv-r{opacity:0;transform:translateX(44px);}
+.rv-s{opacity:0;transform:scale(.93);}
+
+/* ═══════════════════════════════════════════
+   FOCUS / ACCESSIBILITY
+═══════════════════════════════════════════ */
+:focus-visible{outline:3px solid var(--yellow);outline-offset:3px;border-radius:4px;}
+[aria-label],[aria-labelledby]{outline-color:var(--teal-l);}
+
+/* ═══════════════════════════════════════════
+   WHATSAPP FLOATING BUTTON
+═══════════════════════════════════════════ */
+.wa-float{
+  position:fixed;bottom:2rem;right:2rem;z-index:900;
+  display:flex;align-items:center;gap:.6rem;
+  background:#25D366;color:white;
+  border:none;border-radius:50px;
+  padding:.75rem 1.3rem .75rem 1rem;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.85rem;
+  box-shadow:0 8px 32px rgba(37,211,102,.45);
+  cursor:pointer;
+  transition:transform .25s,box-shadow .25s,background .2s;
+  text-decoration:none;
+}
+.wa-float:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 16px 48px rgba(37,211,102,.55);background:#1ebe5d;}
+.wa-float:active{transform:scale(.97);}
+.wa-float svg{width:22px;height:22px;flex-shrink:0;}
+.wa-float-label{white-space:nowrap;}
+@media(max-width:600px){.wa-float-label{display:none;}.wa-float{padding:.85rem;border-radius:50%;}}
+
+/* ═══════════════════════════════════════════
+   DONATE MODAL (QR Bancolombia)
+═══════════════════════════════════════════ */
+#donate-modal{
+  position:fixed;inset:0;z-index:850;
+  background:rgba(0,0,0,0);pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+  padding:1.5rem;
+  transition:background .35s;
+}
+#donate-modal.open{background:rgba(0,0,0,.75);pointer-events:all;}
+.dm-inner{
+  background:white;border-radius:var(--radius-lg);
+  width:min(520px,95vw);
+  transform:scale(.88) translateY(20px);opacity:0;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .35s;
+  overflow:hidden;
+}
+#donate-modal.open .dm-inner{transform:scale(1) translateY(0);opacity:1;}
+
+/* Bancolombia header bar */
+.dm-header{
+  background:#FBBF24;
+  padding:1.4rem 1.8rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.dm-header-logo{display:flex;align-items:center;gap:.6rem;}
+.dm-logo-text{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:900;color:#13202b;letter-spacing:-.02em;}
+.dm-logo-sub{font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(19,32,43,.6);}
+.dm-close-btn{background:rgba(19,32,43,.1);border:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;color:#13202b;transition:background .2s;}
+.dm-close-btn:hover{background:rgba(19,32,43,.22);}
+
+.dm-body{padding:1.8rem 2rem 2rem;}
+.dm-title{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:900;color:var(--dark);margin-bottom:.35rem;}
+.dm-subtitle{font-size:.85rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6;}
+
+/* QR Code area */
+.dm-qr-wrap{
+  background:#f9fafb;border:2px dashed #e5e7eb;
+  border-radius:var(--radius);padding:1.5rem;
+  display:flex;flex-direction:column;align-items:center;gap:1rem;
+  margin-bottom:1.4rem;
+}
+.dm-qr-label{font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-d);}
+.dm-qr-svg-wrap{
+  background:white;padding:.8rem;border-radius:12px;
+  box-shadow:0 4px 20px rgba(0,0,0,.1);
+  border:2px solid #FBBF24;
+}
+.dm-account-info{text-align:center;}
+.dm-account-info .acc-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:.2rem;}
+.dm-account-info .acc-val{font-size:1.02rem;font-weight:800;color:var(--dark);}
+
+.dm-divider{height:1px;background:#f0f0f0;margin:.6rem 0 1.2rem;}
+
+.dm-amounts{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.dm-amt{
+  flex:1;min-width:80px;
+  background:#f9fafb;border:2px solid #e5e7eb;border-radius:var(--radius-sm);
+  padding:.65rem .5rem;text-align:center;cursor:pointer;
+  font-weight:800;font-size:.9rem;color:var(--dark);
+  transition:border-color .2s,background .2s,transform .2s;
+}
+.dm-amt:hover,.dm-amt.active{border-color:#FBBF24;background:#fffde8;transform:translateY(-2px);}
+.dm-amt span{display:block;font-size:.65rem;font-weight:600;color:var(--text-muted);margin-top:.1rem;}
+
+.dm-cta{
+  width:100%;background:#FBBF24;color:var(--dark);border:none;
+  border-radius:50px;padding:1rem;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:.95rem;font-weight:900;cursor:pointer;
+  transition:background .2s,transform .25s,box-shadow .25s;
+  box-shadow:0 4px 20px rgba(251,191,36,.35);
+}
+.dm-cta:hover{background:#f5c800;transform:translateY(-2px);box-shadow:0 8px 32px rgba(245,200,0,.45);}
+.dm-note{font-size:.72rem;color:var(--text-muted);text-align:center;margin-top:.8rem;line-height:1.6;}
+
+/* ═══════════════════════════════════════════
+   PANEL EXPANDED CONTENT
+═══════════════════════════════════════════ */
+.p-section-full{
+  background:rgba(0,180,180,.06);border:1px solid rgba(0,180,180,.15);
+  border-radius:var(--radius-sm);padding:1.4rem;
+  display:flex;flex-direction:column;gap:.7rem;
+}
+.p-detail-row{display:flex;align-items:flex-start;gap:.8rem;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.p-detail-row:last-child{border-bottom:none;}
+.p-detail-icon{font-size:1.2rem;flex-shrink:0;margin-top:.1rem;}
+.p-detail-info strong{display:block;font-size:.88rem;font-weight:800;color:var(--white);margin-bottom:.2rem;}
+.p-detail-info p{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.55;}
+.panel-cta-btn{
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  background:var(--yellow);color:var(--dark);border:none;
+  border-radius:50px;padding:.85rem 1.5rem;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;font-weight:900;
+  cursor:pointer;width:100%;margin-top:1.5rem;
+  transition:background .2s,transform .25s;
+}
+.panel-cta-btn:hover{background:#ffe566;transform:translateY(-2px);}
+.panel-donate-btn{background:rgba(0,180,180,.18);color:var(--teal-l);border:1px solid rgba(0,180,180,.3);margin-top:.6rem;}
+.panel-donate-btn:hover{background:rgba(0,180,180,.3);color:white;}
+
+/* ═══════════════════════════════════════════
+   CONTACT WHATSAPP ITEM
+═══════════════════════════════════════════ */
+.c-item-wa{border-color:rgba(37,211,102,.2) !important;}
+.c-item-wa:hover{background:rgba(37,211,102,.1) !important;border-color:rgba(37,211,102,.4) !important;}
+.c-item-wa a{color:#4ade80 !important;}
+.c-item-wa a:hover{color:#86efac !important;}
+
+/* ═══════════════════════════════════════════
+   COLOMBIA STATS BANNER (new)
+═══════════════════════════════════════════ */
+.colombia-stats{
+  background:linear-gradient(135deg,var(--teal-dd) 0%,var(--dark) 100%);
+  padding:3.5rem 5%;position:relative;overflow:hidden;
+}
+.colombia-stats::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:300px;height:300px;border-radius:50%;
+  background:rgba(0,180,180,.08);pointer-events:none;
+}
+.colombia-stats::after{
+  content:'COLOMBIA';position:absolute;bottom:-1.5rem;left:5%;
+  font-family:'Fraunces',serif;font-size:6rem;font-weight:900;
+  color:rgba(255,255,255,.03);letter-spacing:.1em;pointer-events:none;
+  white-space:nowrap;
+}
+.cs-inner{max-width:1100px;margin:0 auto;}
+.cs-label{
+  font-size:.68rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--teal-l);margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:.7rem;
+}
+.cs-label::before{content:'';width:24px;height:1.5px;background:var(--teal-l);}
+.cs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.06);border-radius:var(--radius);overflow:hidden;}
+.cs-cell{
+  background:rgba(255,255,255,.02);padding:2rem 1.5rem;text-align:center;
+  transition:background .25s;
+}
+.cs-cell:hover{background:rgba(0,180,180,.08);}
+.cs-num{
+  font-family:'Fraunces',serif;font-size:2.6rem;font-weight:900;
+  color:var(--yellow);line-height:1;display:block;margin-bottom:.4rem;
+}
+.cs-desc{font-size:.76rem;color:rgba(255,255,255,.5);line-height:1.6;}
+.cs-source{font-size:.62rem;color:rgba(255,255,255,.2);margin-top:2rem;text-align:right;}
+
+/* ═══════════════════════════════════════════
+   IMPROVED BUTTON PRO STYLES
+═══════════════════════════════════════════ */
+.btn-participate{
+  background:var(--yellow);color:var(--dark);
+  padding:.55rem 1.5rem;border-radius:50px;
+  font-size:.8rem;font-weight:800;letter-spacing:.03em;
+  border:none;cursor:pointer;
+  box-shadow:0 4px 16px rgba(245,200,0,.4);
+  transition:transform .25s,box-shadow .25s,background .2s;
+  position:relative;overflow:hidden;
+  font-family:'Plus Jakarta Sans','Nunito',sans-serif;
+}
+.btn-participate::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(255,255,255,.28);
+  transform:translateX(-110%) skewX(-15deg);
+  transition:transform .4s;
+}
+.btn-participate:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(245,200,0,.5);
+  background:var(--yellow-l);
+}
+.btn-participate:hover::after{transform:translateX(110%) skewX(-15deg);}
+.btn-participate:active{transform:scale(.97);}
+
+/* Nav active section indicator */
+.nav-links li a.nav-active{color:var(--yellow);}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   HAMBURGER MENU
+═══════════════════════════════════════════ */
+.hamburger{
+  display:none;
+  flex-direction:column;justify-content:center;align-items:center;
+  width:42px;height:42px;border:none;background:rgba(255,255,255,.12);
+  border-radius:10px;cursor:pointer;gap:5px;
+  border:1.5px solid rgba(255,255,255,.25);
+  transition:background .2s;
+  flex-shrink:0;
+}
+.hamburger:hover{background:rgba(255,255,255,.22);}
+.hamburger span{
+  display:block;width:20px;height:2px;background:white;border-radius:2px;
+  transition:transform .35s cubic-bezier(.25,.46,.45,.94),opacity .25s;
+}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* Mobile nav drawer */
+.mobile-nav{
+  display:none;
+  position:fixed;inset:0;z-index:490;
+  background:rgba(0,152,152,.97);
+  backdrop-filter:blur(20px);
+  flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:0;
+  transform:translateX(100%);
+  transition:transform .4s cubic-bezier(.25,.46,.45,.94);
+}
+.mobile-nav.open{transform:translateX(0);}
+.mobile-nav ul{list-style:none;display:flex;flex-direction:column;align-items:center;gap:.3rem;width:100%;padding:0 1.5rem;}
+.mobile-nav ul li a{
+  display:block;width:100%;text-align:center;
+  font-size:1.4rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  color:rgba(255,255,255,.85);padding:1rem 1.5rem;border-radius:var(--radius-sm);
+  transition:background .2s,color .2s;
+}
+.mobile-nav ul li a:hover,.mobile-nav ul li a.nav-active{background:rgba(255,255,255,.12);color:var(--yellow);}
+.mobile-nav-bottom{
+  display:flex;flex-direction:column;gap:.7rem;
+  width:100%;padding:1.5rem 1.5rem 3rem;
+}
+.mobile-nav-bottom .btn-participate,.mobile-nav-bottom .btn-learn{
+  width:100%;padding:.9rem;text-align:center;
+  font-size:.95rem;border-radius:var(--radius-sm);
+}
+.mobile-nav-lang{
+  display:flex;justify-content:center;gap:.5rem;
+  padding:.8rem 0 1.5rem;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — TABLET (≤1024px)
+═══════════════════════════════════════════ */
+@media(max-width:1024px){
+  /* Layouts */
+  .about-layout{grid-template-columns:1fr;gap:3rem;margin-top:3rem;}
+  .prob-layout{grid-template-columns:1fr;gap:2rem;margin-top:3rem;}
+  .contact-layout{grid-template-columns:1fr;gap:2.5rem;margin-top:3rem;}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2.5rem;}
+  .action-duo{grid-template-columns:1fr;gap:1rem;}
+  .action-thirds{grid-template-columns:1fr 1fr;gap:1rem;}
+  .impact-grid{grid-template-columns:repeat(2,1fr);}
+  .mv-grid{grid-template-columns:1fr 1fr;}
+  .about-team-grid{grid-template-columns:1fr 1fr;}
+  .photo-grid{grid-template-columns:1fr 1fr;gap:.8rem;}
+  .photo-item:first-child{grid-row:auto;aspect-ratio:16/9;}
+  .prob-right{display:none;}
+  .community-gallery{grid-template-columns:1fr 1fr;grid-auto-rows:200px;}
+  .cm-photo:nth-child(1){grid-column:auto;grid-row:auto;}
+  .community-testimonials{grid-template-columns:1fr 1fr;}
+  .cm-events-grid{grid-template-columns:1fr 1fr;}
+  .cs-grid{grid-template-columns:repeat(2,1fr);}
+  .action-duo-card{min-height:380px;}
+  /* Sections padding */
+  #about,#problem,#action,#community,#contact,.photo-sec,.stmt-sec{padding:4rem 5%;}
+  .impact-sec{padding:4rem 5%;}
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤768px)
+═══════════════════════════════════════════ */
+@media(max-width:768px){
+  /* Nav */
+  .nav-links,.btn-participate,.btn-learn,.lang-toggle{display:none;}
+  .hamburger{display:flex;}
+  .mobile-nav{display:flex;}
+  nav{padding:.8rem 4%;}
+
+  /* Hero */
+  #home{padding:80px 4% 0;min-height:100svh;}
+  .hero-h1{font-size:clamp(2.4rem,10vw,4rem);}
+  .hero-sub{font-size:.95rem;margin-bottom:2rem;}
+  .hero-ctas{gap:.7rem;}
+  .hero-cta-p,.hero-cta-s{padding:.75rem 1.6rem;font-size:.85rem;}
+  .hero-chips{gap:.4rem;margin-bottom:2rem;}
+  .hero-chip{font-size:.72rem;padding:.32rem .85rem;}
+  .hero-illo{margin-top:1.5rem;}
+
+  /* Marquee */
+  .mq-item{font-size:.85rem;padding:0 1.2rem;}
+
+  /* Colombia Stats */
+  .cs-grid{grid-template-columns:1fr 1fr;}
+  .cs-num{font-size:2rem;}
+  .cs-desc{font-size:.7rem;}
+
+  /* Photo section */
+  .photo-grid{grid-template-columns:1fr;gap:.7rem;}
+  .photo-item:first-child{aspect-ratio:16/9;}
+  .photo-sec{padding:3rem 4%;}
+  .photo-sec-top{margin-bottom:2rem;}
+
+  /* About */
+  #about{padding:3.5rem 4%;}
+  .about-layout{gap:2rem;margin-top:2rem;}
+  .about-accent-img,.about-blob-deco{display:none;}
+  .about-main-img{aspect-ratio:16/9;}
+  .about-p{font-size:.92rem;}
+  .mv-grid{grid-template-columns:1fr;gap:.8rem;margin-top:1.5rem;}
+  .about-team-grid{grid-template-columns:1fr 1fr;gap:.7rem;margin-top:1.5rem;}
+  .at-card{padding:1rem;}
+  .at-icon{font-size:1.3rem;}
+  .at-card h4{font-size:.82rem;}
+
+  /* Impact */
+  .impact-sec{padding:3.5rem 4%;}
+  .impact-grid{grid-template-columns:1fr 1fr;margin-top:2.5rem;}
+  .impact-n{font-size:2.8rem;}
+  .impact-cell{padding:2rem 1rem;}
+
+  /* Problem */
+  #problem{padding:3.5rem 4%;}
+  .prob-layout{margin-top:2rem;}
+  .prob-sub{font-size:.9rem;}
+  .prob-item{padding:1.1rem;gap:.9rem;}
+  .prob-num{font-size:1.8rem;}
+  .prob-body h4{font-size:1rem;}
+  .prob-body p{font-size:.8rem;}
+
+  /* Community */
+  #community{padding:3.5rem 4%;}
+  .community-gallery{grid-template-columns:1fr;grid-auto-rows:200px;gap:.7rem;margin-bottom:2rem;}
+  .community-testimonials{grid-template-columns:1fr;gap:1rem;margin-bottom:2rem;}
+  .cm-testimonial{padding:1.4rem;}
+  .cm-events-grid{grid-template-columns:1fr;gap:1rem;}
+  .cm-events-title{font-size:1.4rem;}
+
+  /* Action */
+  #action{padding:3.5rem 4%;}
+  .action-duo{grid-template-columns:1fr;gap:1rem;margin-bottom:1rem;}
+  .action-duo-card{min-height:300px;}
+  .adc-h3{font-size:1.5rem;}
+  .adc-content{padding:1.5rem;}
+  .action-thirds{grid-template-columns:1fr;gap:.8rem;}
+  .am-card{padding:1.4rem;}
+  .action-sub{font-size:.92rem;margin-bottom:2.5rem;}
+
+  /* Statement */
+  .stmt-sec{padding:3.5rem 4%;}
+  .stmt-quote{font-size:1.1rem;left:1.2rem;bottom:1.2rem;max-width:260px;}
+  .stmt-photo-wrap img{aspect-ratio:4/3;}
+
+  /* Contact */
+  #contact{padding:3.5rem 4%;}
+  .contact-layout{gap:2rem;margin-top:2rem;}
+  .c-item{padding:.9rem 1.1rem;}
+  .ai-msgs{height:240px;}
+
+  /* Footer */
+  footer{padding:3rem 4% 2rem;}
+  .footer-grid{grid-template-columns:1fr;gap:2rem;margin-bottom:2rem;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:.8rem;}
+
+  /* Panels */
+  .side-panel{width:100vw;}
+  .panel-inner{padding:3.5rem 1.4rem 2.5rem;}
+  .panel-h1{font-size:2rem;}
+  .p-grid{grid-template-columns:1fr 1fr;}
+  .p-section-full{padding:1.1rem;}
+
+  /* Donate modal */
+  .dm-body{padding:1.4rem 1.2rem 1.5rem;}
+  .dm-amounts{gap:.4rem;}
+  .dm-amt{padding:.5rem .3rem;font-size:.82rem;}
+  .dm-qr-wrap{padding:1.2rem;}
+
+  /* General section headings */
+  .sec-h2{font-size:clamp(1.9rem,7vw,3rem);}
+  .section-eyebrow{font-size:.65rem;}
+
+  /* Hero SVG - hide on tiny screens to save space */
+  .hero-illo{display:none;}
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — SMALL MOBILE (≤480px)
+═══════════════════════════════════════════ */
+@media(max-width:480px){
+  nav{padding:.7rem 4%;}
+  .nav-logo .logo-sub{display:none;}
+
+  /* Hero */
+  .hero-h1{font-size:clamp(2rem,9vw,3rem);}
+  .hero-ctas{flex-direction:column;align-items:stretch;padding:0 1rem;}
+  .hero-cta-p,.hero-cta-s{text-align:center;justify-content:center;}
+  .hero-chips{padding:0 .5rem;}
+
+  /* About team grid 1 col */
+  .about-team-grid{grid-template-columns:1fr;}
+
+  /* Impact 1 col */
+  .impact-grid{grid-template-columns:1fr 1fr;}
+  .impact-n{font-size:2.4rem;}
+
+  /* Stats */
+  .cs-grid{grid-template-columns:1fr 1fr;}
+  .cs-num{font-size:1.8rem;}
+
+  /* Action thirds all 1 col */
+  .action-thirds{grid-template-columns:1fr;}
+
+  /* Panel */
+  .panel-inner{padding:3rem 1rem 2rem;}
+  .p-grid{grid-template-columns:1fr;}
+  .p-card{padding:1rem;}
+
+  /* Donate modal amounts */
+  .dm-amounts{grid-template-columns:1fr 1fr;display:grid;}
+  .dm-amt{min-width:unset;}
+
+  /* Community events 1 col */
+  .community-testimonials,.cm-events-grid{grid-template-columns:1fr;}
+
+  /* Footer */
+  .footer-grid{grid-template-columns:1fr;}
+
+  /* WA button text always hidden below 480 */
+  .wa-float-label{display:none;}
+  .wa-float{padding:.9rem;border-radius:50%;width:54px;height:54px;justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- PANEL OVERLAY -->
+<div class="panel-overlay" id="overlay" role="presentation"></div>
+
+<!-- PANEL: PARTICIPATE -->
+<aside class="side-panel" id="panel-participate" role="dialog" aria-modal="true" aria-labelledby="pp-title">
+  <button class="panel-close" id="close-pp" aria-label="Close panel">✕</button>
+  <div class="panel-inner">
+    <div class="panel-tag" data-t="panel.participate.tag">Get Involved</div>
+    <h2 class="panel-h1" id="pp-title"><span data-t="panel.participate.h1a">Join the</span><br/><em data-t="panel.participate.h1b">movement</em></h2>
+    <p class="panel-sub" data-t="panel.participate.sub">Find a way to contribute that matches your passion. Every action, big or small, creates lasting change.</p>
+    <div class="panel-sections">
+
+      <div class="p-section">
+        <p class="p-section-label" data-t="ps.ed">📚 Education</p>
+        <div class="p-section-full">
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🎓</div>
+            <div class="p-detail-info">
+              <strong data-t="ps.ed.c1.h">Cursos de Salud Mental</strong>
+              <p>Formación en salud mental y bienestar emocional para estudiantes, docentes y comunidades vulnerables de Colombia.</p>
+            </div>
+          </div>
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🛠️</div>
+            <div class="p-detail-info">
+              <strong data-t="ps.ed.c2.h">Talleres Prácticos</strong>
+              <p>Dinámicas interactivas de manejo emocional, resiliencia y primeros auxilios psicológicos — presenciales y virtuales.</p>
+            </div>
+          </div>
+          <div class="p-detail-row">
+            <div class="p-detail-icon">📢</div>
+            <div class="p-detail-info">
+              <strong>Charlas en Instituciones</strong>
+              <p>Intervenciones en colegios y universidades para prevenir el estigma y detectar crisis de salud mental a tiempo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <p class="p-section-label" data-t="ps.sup">🤝 Support</p>
+        <div class="p-section-full">
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🧠</div>
+            <div class="p-detail-info">
+              <strong data-t="ps.sup.c1.h">Acompañamiento Psicológico</strong>
+              <p>Sesiones individuales y grupales con psicólogos voluntarios. Orientación profesional sin costo para comunidades vulnerables.</p>
+            </div>
+          </div>
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🌐</div>
+            <div class="p-detail-info">
+              <strong data-t="ps.sup.c2.h">Redes de Apoyo</strong>
+              <p>Círculos comunitarios de escucha activa y apoyo entre pares — espacios seguros presenciales y en línea.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <p class="p-section-label" data-t="ps.prev">🛡️ Prevention</p>
+        <div class="p-section-full">
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🌍</div>
+            <div class="p-detail-info">
+              <strong data-t="ps.prev.c1.h">Programas Comunitarios</strong>
+              <p>Iniciativas de divulgación y concientización en barrios, municipios y zonas rurales de Colombia.</p>
+            </div>
+          </div>
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🆘</div>
+            <div class="p-detail-info">
+              <strong>Prevención del Suicidio</strong>
+              <p>Capacitación en señales de alerta, protocolos de intervención y derivación inmediata a <strong style="color:var(--teal-l)">Línea 106</strong>.</p>
+            </div>
+          </div>
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🎤</div>
+            <div class="p-detail-info">
+              <strong data-t="ps.prev.c2.h">Charlas Educativas</strong>
+              <p>Invitamos a expertos, psicólogos y líderes comunitarios para sesiones especiales de concienciación.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <p class="p-section-label" data-t="ps.youth">🎓 Youth</p>
+        <div class="p-section-full">
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🎨</div>
+            <div class="p-detail-info">
+              <strong data-t="ps.youth.c1.h">Actividades Juveniles</strong>
+              <p>Arte-terapia, escritura creativa y espacios expresivos para jóvenes entre 13 y 25 años en Colombia.</p>
+            </div>
+          </div>
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🏠</div>
+            <div class="p-detail-info">
+              <strong data-t="ps.youth.c2.h">Espacios Seguros</strong>
+              <p>Entornos sin juicio donde los jóvenes pueden hablar de sus emociones y encontrar acompañamiento real.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <p class="p-section-label" data-t="ps.vol">💛 Volunteer &amp; Donate</p>
+        <a href="mailto:cuidomentalfundacion@gmail.com?subject=Volunteer%20Application" style="text-decoration:none;">
+          <button class="panel-cta-btn">🙋 Ser Voluntario — Escríbenos ↗</button>
+        </a>
+        <button class="panel-cta-btn panel-donate-btn" onclick="openDonateModal()">💳 Donar con QR Bancolombia ↗</button>
+        <a href="https://wa.me/573160408334?text=Hola%2C%20quiero%20ser%20voluntario%20de%20la%20fundaci%C3%B3n%20%F0%9F%92%9A" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+          <button class="panel-cta-btn" style="background:rgba(37,211,102,.15);color:#4ade80;border:1px solid rgba(37,211,102,.3);margin-top:.5rem;">💬 WhatsApp: +57 316 040 8334 ↗</button>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</aside>
+
+<!-- PANEL: LEARN MORE -->
+<aside class="side-panel" id="panel-about" role="dialog" aria-modal="true" aria-labelledby="pa-title">
+  <button class="panel-close" id="close-pa" aria-label="Close panel">✕</button>
+  <div class="panel-inner">
+    <div class="panel-tag" data-t="panel.about.tag">About Us</div>
+    <h2 class="panel-h1" id="pa-title"><span data-t="panel.about.h1a">Our</span> <em data-t="panel.about.h1b">story</em></h2>
+    <p class="panel-sub" data-t="panel.about.sub">A Colombian non-profit built on empathy, community, and the belief that no one should face their mental health struggles alone.</p>
+    <div class="panel-sections">
+
+      <div class="p-section">
+        <p class="p-section-label" data-t="pa.who">🎯 Who We Are</p>
+        <div class="p-section-full">
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🎯</div>
+            <div class="p-detail-info">
+              <strong data-t="pa.who.c1.h">Misión</strong>
+              <p>Promover la salud mental brindando apoyo, educación y recursos, reduciendo el estigma de hablar sobre emociones en Colombia.</p>
+            </div>
+          </div>
+          <div class="p-detail-row">
+            <div class="p-detail-icon">🌎</div>
+            <div class="p-detail-info">
+              <strong data-t="pa.who.c2.h">Visión</strong>
+              <p>Una sociedad colombiana donde la salud mental sea prioridad y nadie enfrente sus luchas emocionales en soledad.</p>
+            </div>
+          </div>
+          <div class="p-detail-row">
+            <div class="p-detail-icon">📖</div>
+            <div class="p-detail-info">
+              <strong data-t="pa.who.c3.h">Nuestra Historia</strong>
+              <p>Años de trabajo comunitario, programas de impacto y presencia activa en las regiones más vulnerables de Colombia. Nacimos de la necesidad de romper el silencio alrededor de la salud mental.</p>
+            </div>
+          </div>
+          <div class="p-detail-row">
+            <div class="p-detail-icon">💛</div>
+            <div class="p-detail-info">
+              <strong>Valores</strong>
+              <p>Empatía · Comunidad · Inclusión · Respeto · Transformación social</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <p class="p-section-label" data-t="pa.team">👥 Our Team</p>
+        <div class="team-row">
+          <div class="team-item" role="listitem">
+            <div class="team-item-icon">🧠</div>
+            <div><strong data-t="pa.team.t1.h">Psicólogos</strong><span data-t="pa.team.t1.p">Orientación y acompañamiento profesional en salud mental</span></div>
+          </div>
+          <div class="team-item" role="listitem">
+            <div class="team-item-icon">🙋</div>
+            <div><strong data-t="pa.team.t2.h">Voluntarios</strong><span data-t="pa.team.t2.p">El corazón y motor de nuestra comunidad</span></div>
+          </div>
+          <div class="team-item" role="listitem">
+            <div class="team-item-icon">📖</div>
+            <div><strong data-t="pa.team.t3.h">Educadores</strong><span data-t="pa.team.t3.p">Talleres formativos y charlas de concientización</span></div>
+          </div>
+          <div class="team-item" role="listitem">
+            <div class="team-item-icon">🌱</div>
+            <div><strong data-t="pa.team.t4.h">Líderes Comunitarios</strong><span data-t="pa.team.t4.p">Puente entre la fundación y las comunidades locales</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <p class="p-section-label" data-t="pa.gallery">📷 Gallery</p>
+        <div class="panel-gallery">
+          <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=300&q=80" alt="Community gathering" loading="lazy" style="cursor:pointer;" onclick="closeAllPanels();openModal('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1400&q=90','Community Gathering')"/>
+          <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=300&q=80" alt="Support session" loading="lazy" style="cursor:pointer;" onclick="closeAllPanels();openModal('https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1400&q=90','Support Session')"/>
+          <img src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=300&q=80" alt="Youth program" loading="lazy" style="cursor:pointer;" onclick="closeAllPanels();openModal('https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=1400&q=90','Youth Program')"/>
+          <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=300&q=80" alt="Volunteers" loading="lazy" style="cursor:pointer;" onclick="closeAllPanels();openModal('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=1400&q=90','Volunteers')"/>
+          <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=300&q=80" alt="Nature therapy" loading="lazy" style="cursor:pointer;" onclick="closeAllPanels();openModal('https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=1400&q=90','Nature Therapy')"/>
+          <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=300&q=80" alt="Workshop" loading="lazy" style="cursor:pointer;" onclick="closeAllPanels();openModal('https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1400&q=90','Workshop')"/>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <p class="p-section-label">📞 Contact</p>
+        <a href="https://wa.me/573160408334?text=Hola%2C%20quiero%20saber%20m%C3%A1s%20sobre%20la%20fundaci%C3%B3n" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+          <button class="panel-cta-btn" style="background:rgba(37,211,102,.15);color:#4ade80;border:1px solid rgba(37,211,102,.3);">💬 WhatsApp: +57 316 040 8334 ↗</button>
+        </a>
+        <a href="mailto:cuidomentalfundacion@gmail.com" style="text-decoration:none;">
+          <button class="panel-cta-btn panel-donate-btn" style="margin-top:.5rem;">📧 cuidomentalfundacion@gmail.com ↗</button>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ MOBILE NAV DRAWER ═══ -->
+<div class="mobile-nav" id="mobile-nav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+  <ul role="list">
+    <li><a href="#about" data-t="nav.about" onclick="closeMobileNav()">About</a></li>
+    <li><a href="#problem" data-t="nav.problem" onclick="closeMobileNav()">The Problem</a></li>
+    <li><a href="#community" data-t="nav.community" onclick="closeMobileNav()">Community</a></li>
+    <li><a href="#action" data-t="nav.action" onclick="closeMobileNav()">Get Involved</a></li>
+    <li><a href="#contact" data-t="nav.contact" onclick="closeMobileNav()">Contact</a></li>
+  </ul>
+  <div class="mobile-nav-lang">
+    <button class="lb active" id="bEN_m" onclick="setLang('en');closeMobileNav()" aria-label="English">EN</button>
+    <button class="lb" id="bES_m" onclick="setLang('es');closeMobileNav()" aria-label="Español">ES</button>
+  </div>
+  <div class="mobile-nav-bottom">
+    <button class="btn-participate" id="mob-participate" data-t="nav.cta.participate" onclick="closeMobileNav();openPanel(panelP,this)">Get Involved</button>
+    <button class="btn-learn" id="mob-learn" data-t="nav.cta.learn" onclick="closeMobileNav();openPanel(panelA,this)">Learn More</button>
+  </div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav id="main-nav" role="navigation" aria-label="Main navigation">
+  <a href="#home" class="nav-logo" aria-label="Mental Health Care Foundation - Home">
+    <span class="logo-icon" aria-hidden="true">🧠</span>
+    <span class="logo-text-wrap">
+      <span class="logo-main">Mental Health Care</span>
+      <span class="logo-sub">Foundation · Colombia</span>
+    </span>
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="#about" data-t="nav.about">About</a></li>
+    <li><a href="#problem" data-t="nav.problem">The Problem</a></li>
+    <li><a href="#community" data-t="nav.community">Community</a></li>
+    <li><a href="#action" data-t="nav.action">Get Involved</a></li>
+    <li><a href="#contact" data-t="nav.contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-toggle" role="group" aria-label="Language selector">
+      <button class="lb active" id="bEN" onclick="setLang('en')" aria-pressed="true" aria-label="Switch to English">EN</button>
+      <button class="lb" id="bES" onclick="setLang('es')" aria-pressed="false" aria-label="Cambiar a español">ES</button>
+    </div>
+    <button class="btn-participate" id="nav-participate" aria-haspopup="dialog" aria-expanded="false" data-t="nav.cta.participate">Get Involved</button>
+    <button class="btn-learn" id="nav-learn" aria-haspopup="dialog" aria-expanded="false" data-t="nav.cta.learn">Learn More</button>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="home" aria-label="Hero section">
+  <div class="fs fs-1" aria-hidden="true"></div>
+  <div class="fs fs-2" aria-hidden="true"></div>
+  <div class="fs fs-3" aria-hidden="true"></div>
+  <div class="fs fs-4" aria-hidden="true"></div>
+  <div class="fs fs-5" aria-hidden="true"></div>
+
+  <p class="hero-eyebrow" id="h-ey" data-t="hero.eyebrow">Mental Health Care Foundation · Colombia</p>
+
+  <h1 class="hero-h1">
+    <span class="ln"><span class="wi" data-t="hero.l1">No one should</span></span>
+    <span class="ln"><span class="wi"><em data-t="hero.l2">face their struggles</em></span></span>
+    <span class="ln"><span class="wi" data-t="hero.l3">alone.</span></span>
+  </h1>
+
+  <p class="hero-sub" id="h-sub" data-t="hero.sub">We promote mental health and emotional well-being for everyone — especially youth and vulnerable communities across Colombia.</p>
+
+  <div class="hero-chips" id="h-chips" role="list">
+    <span class="hero-chip" role="listitem" data-t="chip.e">📚 Education</span>
+    <span class="hero-chip" role="listitem" data-t="chip.s">🤝 Support</span>
+    <span class="hero-chip" role="listitem" data-t="chip.p">💛 Prevention</span>
+    <span class="hero-chip" role="listitem" data-t="chip.y">🎓 Youth</span>
+  </div>
+
+  <div class="hero-ctas" id="h-ctas">
+    <button class="hero-cta-p" id="hero-participate" aria-haspopup="dialog" data-t="hero.cta1">Get Involved ↗</button>
+    <button class="hero-cta-s" id="hero-learn" aria-haspopup="dialog" data-t="hero.cta2">Learn More</button>
+  </div>
+
+  <!-- Illustrated SVG scene -->
+  <svg class="hero-illo" id="hero-svg" viewBox="0 0 1200 310" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <!-- Clouds -->
+    <ellipse cx="105" cy="165" rx="102" ry="62" fill="white" opacity=".93"/>
+    <ellipse cx="172" cy="146" rx="78" ry="53" fill="white" opacity=".96"/>
+    <ellipse cx="52"  cy="162" rx="62" ry="42" fill="white" opacity=".87"/>
+    <ellipse cx="1095" cy="158" rx="108" ry="62" fill="white" opacity=".89"/>
+    <ellipse cx="1162" cy="142" rx="76" ry="51" fill="white" opacity=".93"/>
+    <ellipse cx="1038" cy="156" rx="68" ry="46" fill="white" opacity=".83"/>
+    <ellipse cx="585"  cy="140" rx="128" ry="72" fill="white" opacity=".82"/>
+    <ellipse cx="660"  cy="125" rx="90"  ry="56" fill="white" opacity=".87"/>
+    <ellipse cx="495"  cy="138" rx="82"  ry="53" fill="white" opacity=".76"/>
+    <!-- Ground -->
+    <path d="M0 228 Q300 180 600 208 Q900 180 1200 218 L1200 310 L0 310Z" fill="white" opacity=".94"/>
+    <path d="M0 258 Q600 240 1200 252 L1200 310 L0 310Z" fill="white"/>
+    <!-- Person 1: curly hair, waving -->
+    <g id="p1" transform="translate(265,118)">
+      <circle cx="0" cy="0" r="23" fill="none" stroke="#13202b" stroke-width="2.3"/>
+      <path d="M-21,-7 Q-18,-27 0,-27 Q18,-27 21,-7" fill="#13202b"/>
+      <path d="M-17,-19 Q-21,-29 -13,-31 Q-5,-33 -3,-25" fill="#13202b"/>
+      <path d="M17,-19 Q21,-29 13,-31 Q5,-33 3,-25" fill="#13202b"/>
+      <circle cx="-7" cy="2" r="2.4" fill="#13202b"/>
+      <circle cx="7" cy="2" r="2.4" fill="#13202b"/>
+      <path d="M-8,8 Q0,16 8,8" stroke="#13202b" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <line x1="0" y1="23" x2="0" y2="84" stroke="#13202b" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M0,40 Q22,22 30,-4" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M0,40 Q-20,54 -28,70" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M0,84 Q-12,106 -18,126" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M0,84 Q12,106 18,126" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- Person 2: teacher with glasses -->
+    <g id="p2" transform="translate(440,106)">
+      <circle cx="0" cy="0" r="23" fill="none" stroke="#13202b" stroke-width="2.3"/>
+      <circle cx="-7" cy="2" r="4.5" fill="none" stroke="#13202b" stroke-width="1.5"/>
+      <circle cx="7" cy="2" r="4.5" fill="none" stroke="#13202b" stroke-width="1.5"/>
+      <line x1="-2.5" y1="2" x2="2.5" y2="2" stroke="#13202b" stroke-width="1.5"/>
+      <path d="M-8,8 Q0,14 8,8" stroke="#13202b" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M-20,-6 Q-16,-26 0,-26 Q16,-26 20,-6" fill="#13202b"/>
+      <line x1="0" y1="23" x2="0" y2="88" stroke="#13202b" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M0,44 Q26,30 38,14" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <line x1="38" y1="14" x2="44" y2="-8" stroke="#13202b" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="-18" cy="64" rx="13" ry="17" fill="#00b4b4" stroke="#13202b" stroke-width="1.8"/>
+      <path d="M0,44 Q-20,60 -26,76" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M0,88 Q-12,110 -16,130" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M0,88 Q12,110 16,130" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- Person 3: small child waving, pink hat -->
+    <g id="p3" transform="translate(588,142)">
+      <circle cx="0" cy="0" r="18" fill="none" stroke="#13202b" stroke-width="2.1"/>
+      <path d="M-16,-4 Q-13,-20 0,-20 Q13,-20 16,-4" fill="#13202b"/>
+      <rect x="-14" y="-24" width="28" height="9" rx="3" fill="#e8446a" stroke="#13202b" stroke-width="1.4"/>
+      <circle cx="-5.5" cy="1.5" r="2" fill="#13202b"/>
+      <circle cx="5.5" cy="1.5" r="2" fill="#13202b"/>
+      <path d="M-6,7 Q0,13 6,7" stroke="#13202b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <line x1="0" y1="18" x2="0" y2="68" stroke="#13202b" stroke-width="2.1" stroke-linecap="round"/>
+      <path d="M0,36 Q20,22 26,6" stroke="#13202b" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+      <path d="M0,36 Q-18,50 -22,64" stroke="#13202b" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+      <path d="M0,68 Q-10,88 -14,106" stroke="#13202b" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+      <path d="M0,68 Q10,88 14,106" stroke="#13202b" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- Person 4: arms wide open, pencil -->
+    <g id="p4" transform="translate(752,110)">
+      <circle cx="0" cy="0" r="23" fill="none" stroke="#13202b" stroke-width="2.3"/>
+      <path d="M-19,-6 Q-15,-26 0,-26 Q15,-26 19,-6" fill="#13202b"/>
+      <circle cx="-7" cy="2" r="2.4" fill="#13202b"/>
+      <circle cx="7" cy="2" r="2.4" fill="#13202b"/>
+      <path d="M-8,8 Q0,16 8,8" stroke="#13202b" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <line x1="0" y1="23" x2="0" y2="88" stroke="#13202b" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M0,42 Q-30,36 -52,28" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M0,42 Q30,36 52,28" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <rect x="49" y="20" width="6" height="21" rx="2" fill="#f5c800" stroke="#13202b" stroke-width="1.4" transform="rotate(-20,52,30)"/>
+      <path d="M0,88 Q-10,108 -18,120" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M0,88 Q10,108 18,120" stroke="#13202b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- Person 5: jumping -->
+    <g id="p5" transform="translate(930,126)">
+      <circle cx="0" cy="0" r="21" fill="none" stroke="#13202b" stroke-width="2.2"/>
+      <path d="M-18,-5 Q-15,-24 0,-24 Q15,-24 18,-5" fill="#13202b"/>
+      <circle cx="-6.5" cy="2" r="2.2" fill="#13202b"/>
+      <circle cx="6.5" cy="2" r="2.2" fill="#13202b"/>
+      <path d="M-7,8 Q0,14 7,8" stroke="#13202b" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <line x1="0" y1="21" x2="0" y2="80" stroke="#13202b" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M0,40 Q24,28 34,12" stroke="#13202b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M0,40 Q-22,52 -30,66" stroke="#13202b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M0,80 Q-18,96 -28,108" stroke="#13202b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M0,80 Q18,96 28,108" stroke="#13202b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- Floating hearts -->
+    <text x="244" y="92" font-size="18" fill="#f5c800" opacity=".9">♥</text>
+    <text x="512" y="84" font-size="15" fill="#e8446a" opacity=".8">♥</text>
+    <text x="724" y="80" font-size="17" fill="#e0f7f7" opacity=".9">♥</text>
+    <text x="904" y="90" font-size="15" fill="#f5c800" opacity=".9">♥</text>
+    <!-- Stars -->
+    <text x="195" y="60" font-size="13" fill="#f5c800" opacity=".65">✦</text>
+    <text x="666" y="54" font-size="11" fill="white" opacity=".45">✦</text>
+    <text x="1018" y="66" font-size="13" fill="#f5c800" opacity=".6">✦</text>
+    <text x="360" y="72" font-size="9" fill="white" opacity=".35">✦</text>
+    <text x="840" y="68" font-size="10" fill="#e8446a" opacity=".5">✦</text>
+  </svg>
+</section>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="mq-wrap" role="marquee" aria-label="Foundation themes">
+  <div class="mq-track" id="mq-track"></div>
+</div>
+
+<!-- ═══ COLOMBIA STATS BANNER ═══ -->
+<div class="colombia-stats" aria-label="Mental health statistics in Colombia">
+  <div class="cs-inner">
+    <p class="cs-label">Mental health in Colombia</p>
+    <div class="cs-grid">
+      <div class="cs-cell">
+        <span class="cs-num">75%</span>
+        <span class="cs-desc">of people with mental disorders receive no treatment (WHO)</span>
+      </div>
+      <div class="cs-cell">
+        <span class="cs-num">1 in 5</span>
+        <span class="cs-desc">Colombian youth experience anxiety or depression</span>
+      </div>
+      <div class="cs-cell">
+        <span class="cs-num">4.7M</span>
+        <span class="cs-desc">people in Colombia live with a mental health condition</span>
+      </div>
+      <div class="cs-cell">
+        <span class="cs-num">106</span>
+        <span class="cs-desc">Free 24/7 crisis line — available nationwide</span>
+      </div>
+    </div>
+    <p class="cs-source">Sources: WHO, MinSalud Colombia, ENSM 2023</p>
+  </div>
+</div>
+
+<!-- ═══ PHOTO SECTION ═══ -->
+<section class="photo-sec" aria-label="Photo gallery">
+  <div class="photo-sec-top">
+    <p class="section-eyebrow rv" data-t="photo.ey">Every step leaves a mark</p>
+    <h2 class="sec-h2 rv" style="color:var(--dark);">Mental health is <em data-t="photo.h2em" style="color:var(--teal-d);">a story that can't be erased</em></h2>
+  </div>
+  <div class="photo-grid">
+    <div class="photo-item" onclick="openModal('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1400&q=90','Community')"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=700&q=80" alt="Community gathering" loading="lazy"/><div class="photo-item-label" data-t="ph.t1">Community</div><div class="photo-item-zoom">🔍</div></div>
+    <div class="photo-item" onclick="openModal('https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1400&q=90','Support')"><img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=600&q=80" alt="Emotional support" loading="lazy"/><div class="photo-item-label" data-t="ph.t2">Support</div><div class="photo-item-zoom">🔍</div></div>
+    <div class="photo-item" onclick="openModal('https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=1400&q=90','Youth')"><img src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=600&q=80" alt="Youth programs" loading="lazy"/><div class="photo-item-label" data-t="ph.t3">Youth</div><div class="photo-item-zoom">🔍</div></div>
+    <div class="photo-item" onclick="openModal('https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1400&q=90','Workshops')"><img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&q=80" alt="Workshops" loading="lazy"/><div class="photo-item-label" data-t="ph.t4">Workshops</div><div class="photo-item-zoom">🔍</div></div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about" aria-label="About the foundation">
+  <div class="about-layout">
+    <div class="about-photo-side rv-l">
+      <div class="about-blob-deco" aria-hidden="true"></div>
+      <div class="about-main-img">
+        <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80" alt="Foundation team members working together" loading="lazy"/>
+      </div>
+      <div class="about-accent-img">
+        <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=500&q=80" alt="Peaceful nature" loading="lazy"/>
+      </div>
+    </div>
+    <div class="about-text-side">
+      <p class="section-eyebrow rv" data-t="about.ey">About Us</p>
+      <h2 class="sec-h2 rv">Who <em data-t="about.h2em">we are</em></h2>
+      <p class="about-p rv" data-t="about.p1">Mental Health Care Foundation is a social organization working to improve the emotional well-being of people — especially youth, students, and vulnerable communities.</p>
+      <p class="about-p rv" data-t="about.p2">We run educational talks, workshops, psychological counseling, and awareness campaigns. Everyone deserves emotional support and access to psychological care.</p>
+      <div class="mv-grid">
+        <div class="mv-card rv"><h3 data-t="mv.mt">🎯 Mission</h3><p data-t="mv.mp">Promote mental health by providing support, education, and resources — reducing the stigma of talking about emotions.</p></div>
+        <div class="mv-card rv"><h3 data-t="mv.vt">🌎 Vision</h3><p data-t="mv.vp">A society where mental health is a priority and no one faces their emotional struggles alone.</p></div>
+      </div>
+      <div class="about-team-grid">
+        <div class="at-card"><div class="at-icon">🧠</div><h4 data-t="at.h1">Psychologists</h4><p data-t="at.p1">Professional orientation and support</p></div>
+        <div class="at-card"><div class="at-icon">🙋</div><h4 data-t="at.h2">Volunteers</h4><p data-t="at.p2">The heart of our community</p></div>
+        <div class="at-card"><div class="at-icon">📖</div><h4 data-t="at.h3">Educators</h4><p data-t="at.p3">Workshops and formative talks</p></div>
+        <div class="at-card"><div class="at-icon">🌱</div><h4 data-t="at.h4">Community Leaders</h4><p data-t="at.p4">Bridge to local communities</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ IMPACT ═══ -->
+<section class="impact-sec" aria-label="Foundation impact statistics">
+  <div class="section-eyebrow rv" data-t="impact.ey">Our Impact</div>
+  <h2 class="sec-h2 rv">Numbers that <em data-t="impact.h2em">speak for themselves</em></h2>
+  <div class="impact-grid">
+    <div class="impact-cell"><span class="impact-n" data-count="1200">0</span><p class="impact-label" data-t="imp.l1">People reached annually</p></div>
+    <div class="impact-cell"><span class="impact-n" data-count="48">0</span><p class="impact-label" data-t="imp.l2">Workshops per year</p></div>
+    <div class="impact-cell"><span class="impact-n" data-count="320">0</span><p class="impact-label" data-t="imp.l3">Active volunteers</p></div>
+    <div class="impact-cell"><span class="impact-n" data-count="15">0</span><p class="impact-label" data-t="imp.l4">Communities served</p></div>
+  </div>
+</section>
+
+<!-- ═══ PROBLEM ═══ -->
+<section id="problem" aria-label="The mental health problem">
+  <div class="section-eyebrow rv" data-t="prob.ey">The Problem</div>
+  <h2 class="sec-h2 rv">Mental health <em data-t="prob.h2em">matters.</em></h2>
+  <div class="prob-layout">
+    <div>
+      <p class="prob-sub rv" data-t="prob.p">Many people suffer in silence due to fear, shame, or lack of resources. Young people are among the most affected.</p>
+      <div class="prob-list">
+        <div class="prob-item"><span class="prob-num">01</span><div class="prob-body"><h4 data-t="pb1.h">Anxiety & Depression</h4><p data-t="pb1.p">Millions suffer without receiving care. Fear of stigma keeps them isolated and silent.</p></div></div>
+        <div class="prob-item"><span class="prob-num">02</span><div class="prob-body"><h4 data-t="pb2.h">Pressure on Youth</h4><p data-t="pb2.p">Academic stress, family issues, social media and bullying profoundly affect young students.</p></div></div>
+        <div class="prob-item"><span class="prob-num">03</span><div class="prob-body"><h4 data-t="pb3.h">Access Barriers</h4><p data-t="pb3.p">Shame, lack of information, and limited resources prevent many from seeking help.</p></div></div>
+        <div class="prob-item"><span class="prob-num">04</span><div class="prob-body"><h4 data-t="pb4.h">Life Impact</h4><p data-t="pb4.p">Untreated mental health issues affect relationships, academics, quality of life, and physical health.</p></div></div>
+      </div>
+    </div>
+    <div class="prob-right rv-r">
+      <div class="prob-big" aria-hidden="true">75%</div>
+      <div class="prob-photo">
+        <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=600&q=80" alt="Person receiving support" loading="lazy"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ IMAGE MODAL ═══ -->
+<div id="img-modal" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <div id="img-modal-inner">
+    <button id="img-modal-close" onclick="closeModal()" aria-label="Cerrar imagen">✕</button>
+    <img id="img-modal-img" src="" alt=""/>
+    <div id="img-modal-caption"></div>
+    <div id="img-modal-nav">
+      <button class="img-nav-btn" onclick="modalNav(-1)" aria-label="Imagen anterior">←</button>
+      <button class="img-nav-btn" onclick="modalNav(1)" aria-label="Imagen siguiente">→</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMMUNITY ═══ -->
+<section id="community" aria-label="Our community">
+  <div class="section-eyebrow rv">Our Community</div>
+  <h2 class="sec-h2 rv">Stories of <em>real change</em></h2>
+  <p class="community-intro rv">Every photo, every face, every moment — a testament to the power of community. These are the people behind Mental Health Care Foundation.</p>
+
+  <div class="community-gallery">
+    <div class="cm-photo rv" onclick="openModal('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1400&q=90','Community Gathering')">
+      <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&q=80" alt="Community gathering" loading="lazy"/>
+      <div class="cm-photo-overlay"></div><div class="cm-photo-label">Community Gathering</div><div class="cm-photo-zoom">🔍</div>
+    </div>
+    <div class="cm-photo rv" onclick="openModal('https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1400&q=90','Support Sessions')">
+      <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=600&q=80" alt="Support session" loading="lazy"/>
+      <div class="cm-photo-overlay"></div><div class="cm-photo-label">Support Sessions</div><div class="cm-photo-zoom">🔍</div>
+    </div>
+    <div class="cm-photo rv" onclick="openModal('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=1400&q=90','Volunteer Team')">
+      <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=600&q=80" alt="Volunteer team" loading="lazy"/>
+      <div class="cm-photo-overlay"></div><div class="cm-photo-label">Volunteer Team</div><div class="cm-photo-zoom">🔍</div>
+    </div>
+    <div class="cm-photo rv" onclick="openModal('https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=1400&q=90','Youth Programs')">
+      <img src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=600&q=80" alt="Youth programs" loading="lazy"/>
+      <div class="cm-photo-overlay"></div><div class="cm-photo-label">Youth Programs</div><div class="cm-photo-zoom">🔍</div>
+    </div>
+    <div class="cm-photo rv" onclick="openModal('https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1400&q=90','Workshops')">
+      <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&q=80" alt="Workshop" loading="lazy"/>
+      <div class="cm-photo-overlay"></div><div class="cm-photo-label">Workshops</div><div class="cm-photo-zoom">🔍</div>
+    </div>
+    <div class="cm-photo rv" onclick="openModal('https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=1400&q=90','Nature &amp; Wellbeing')">
+      <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=600&q=80" alt="Nature therapy" loading="lazy"/>
+      <div class="cm-photo-overlay"></div><div class="cm-photo-label">Nature &amp; Wellbeing</div><div class="cm-photo-zoom">🔍</div>
+    </div>
+  </div>
+
+  <div class="community-testimonials">
+    <div class="cm-testimonial rv">
+      <p class="cm-testimonial-text">"The foundation gave me the tools and community I needed when I felt completely alone. I am forever grateful."</p>
+      <div class="cm-testimonial-author"><div class="cm-testimonial-avatar">🌱</div><div><div class="cm-testimonial-name">Valentina R.</div><div class="cm-testimonial-role">Program participant, Bogotá</div></div></div>
+    </div>
+    <div class="cm-testimonial rv">
+      <p class="cm-testimonial-text">"Volunteering here changed my perspective completely. Watching people rediscover hope is the most rewarding thing I've done."</p>
+      <div class="cm-testimonial-author"><div class="cm-testimonial-avatar">🙋</div><div><div class="cm-testimonial-name">Camilo A.</div><div class="cm-testimonial-role">Volunteer educator</div></div></div>
+    </div>
+    <div class="cm-testimonial rv">
+      <p class="cm-testimonial-text">"As a psychologist, I've seen firsthand how community-based support can transform lives. Mental Health Care does this beautifully."</p>
+      <div class="cm-testimonial-author"><div class="cm-testimonial-avatar">🧠</div><div><div class="cm-testimonial-name">Dr. Sofía M.</div><div class="cm-testimonial-role">Psychologist &amp; collaborator</div></div></div>
+    </div>
+  </div>
+
+  <div class="community-events">
+    <h3 class="cm-events-title rv">Upcoming <em>Activities</em></h3>
+    <div class="cm-events-grid">
+      <div class="cm-event rv">
+        <div class="cm-event-img"><img src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=600&q=80" alt="Youth workshop" loading="lazy"/></div>
+        <div class="cm-event-body"><div class="cm-event-date">May 10, 2025 · Bogotá</div><div class="cm-event-name">Youth Mental Health Workshop</div><div class="cm-event-desc">Interactive session on anxiety management and emotional resilience for students.</div></div>
+      </div>
+      <div class="cm-event rv">
+        <div class="cm-event-img"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80" alt="Community talk" loading="lazy"/></div>
+        <div class="cm-event-body"><div class="cm-event-date">May 24, 2025 · Online</div><div class="cm-event-name">Breaking the Stigma Talk</div><div class="cm-event-desc">A public conversation on dismantling mental health stigma in Colombian communities.</div></div>
+      </div>
+      <div class="cm-event rv">
+        <div class="cm-event-img"><img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=600&q=80" alt="Mindfulness" loading="lazy"/></div>
+        <div class="cm-event-body"><div class="cm-event-date">June 5, 2025 · Medellín</div><div class="cm-event-name">Mindfulness &amp; Nature Retreat</div><div class="cm-event-desc">A full-day restorative experience combining guided mindfulness and community connection.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ACTION ═══ -->
+<section id="action" aria-label="How to get involved">
+  <div class="section-eyebrow rv" data-t="act.ey">Get Involved</div>
+  <h2 class="sec-h2 rv">Be part of <em data-t="act.h2em">the change</em></h2>
+  <p class="action-sub rv" data-t="act.sub">With your support, we move forward together. Every gesture counts and can transform a life.</p>
+
+  <div class="action-duo">
+    <a href="mailto:cuidomentalfundacion@gmail.com?subject=Volunteer%20Application" class="action-duo-card" style="display:block;text-decoration:none;" aria-label="Volunteer with us">
+      <div class="adc-media"><img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=900&q=80" alt="Volunteering" loading="lazy"/></div>
+      <div class="adc-overlay"></div>
+      <div class="adc-content">
+        <div class="adc-tag" data-t="adc1.tag">Volunteering</div>
+        <h3 class="adc-h3" data-t="adc1.h">Imagine changing<br/>the future</h3>
+        <p class="adc-p" data-t="adc1.p">Share your energy and transform lives in your community.</p>
+        <span style="display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:.45rem 1.1rem;border-radius:50px;font-size:.8rem;font-weight:800;color:white;">Volunteer now ↗</span>
+      </div>
+    </a>
+    <a href="javascript:void(0)" onclick="openDonateModal()" class="action-duo-card" style="display:block;text-decoration:none;" aria-label="Donate to the foundation">
+      <div class="adc-blob-bg">
+        <div class="adc-blob" aria-hidden="true"></div>
+        <div class="adc-dots" aria-hidden="true"></div>
+        <div class="adc-icon-wrap" aria-hidden="true">💚</div>
+      </div>
+      <div class="adc-content">
+        <div class="adc-tag" data-t="adc2.tag">Donate</div>
+        <h3 class="adc-h3" data-t="adc2.h">Support mental<br/>health programs</h3>
+        <p class="adc-p" data-t="adc2.p">Your donation funds workshops, materials, and emotional support programs.</p>
+        <span style="display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;background:var(--yellow);padding:.45rem 1.1rem;border-radius:50px;font-size:.8rem;font-weight:800;color:var(--dark);">Donate now ↗</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="action-thirds">
+    <a href="mailto:cuidomentalfundacion@gmail.com?subject=Volunteer%20Application" class="am-card" style="text-decoration:none;display:block;" aria-label="Volunteer"><div class="am-icon">👩‍⚕️</div><h4 class="am-h4" data-t="am1.h">Volunteer</h4><ul class="am-ul"><li data-t="am1.l1">Help facilitate workshops</li><li data-t="am1.l2">Support mental health campaigns</li><li data-t="am1.l3">Psychologists offering talks welcome</li></ul><div style="margin-top:1rem;font-size:.78rem;font-weight:800;color:var(--yellow);">Apply now ↗</div></a>
+    <a href="javascript:void(0)" onclick="openDonateModal()" class="am-card" style="text-decoration:none;display:block;" aria-label="Donate"><div class="am-icon">💰</div><h4 class="am-h4" data-t="am2.h">Donate</h4><ul class="am-ul"><li data-t="am2.l1">Psychological workshops</li><li data-t="am2.l2">Educational materials</li><li data-t="am2.l3">Emotional support programs</li></ul><div style="margin-top:1rem;font-size:.78rem;font-weight:800;color:var(--yellow);">Donar con QR ↗</div></a>
+    <a href="https://instagram.com/cuidomentalfundacion" target="_blank" rel="noopener noreferrer" class="am-card" style="text-decoration:none;display:block;" aria-label="Follow us"><div class="am-icon">📢</div><h4 class="am-h4" data-t="am3.h">Spread the Word</h4><ul class="am-ul"><li data-t="am3.l1">Share on social media</li><li data-t="am3.l2">Talk about mental health</li><li data-t="am3.l3">Follow @cuidomentalfundacion</li></ul><div style="margin-top:1rem;font-size:.78rem;font-weight:800;color:var(--yellow);">Follow us ↗</div></a>
+  </div>
+</section>
+
+<!-- ═══ STATEMENT ═══ -->
+<section class="stmt-sec" aria-label="Foundation statement">
+  <p class="section-eyebrow rv" data-t="stmt.ey">With your support, we move forward together</p>
+  <h2 class="sec-h2 rv">Be part of the change<br/><em data-t="stmt.em">and leave your mark</em></h2>
+  <div class="stmt-photo-wrap rv-s">
+    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=1400&q=80" alt="Foundation volunteers working together" loading="lazy"/>
+    <div class="stmt-overlay" aria-hidden="true"></div>
+    <p class="stmt-quote" data-t="stmt.q">"Talking about mental health can save lives."</p>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" aria-label="Contact information">
+  <div class="section-eyebrow rv" data-t="con.ey">Contact</div>
+  <h2 class="sec-h2 rv">Let's talk <em data-t="con.h2em">together</em></h2>
+  <div class="contact-layout">
+    <div class="contact-lines">
+      <div class="c-item"><div class="c-ico" aria-hidden="true">📧</div><div><span class="c-lbl" data-t="cl.email">Email</span><a href="mailto:cuidomentalfundacion@gmail.com" aria-label="Send email to foundation">cuidomentalfundacion@gmail.com</a></div></div>
+      <div class="c-item c-item-wa"><div class="c-ico" aria-hidden="true">💬</div><div><span class="c-lbl">WhatsApp</span><a href="https://wa.me/573160408334?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20Mental%20Health%20Care%20Foundation" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">+57 316 040 8334</a></div></div>
+      <div class="c-item"><div class="c-ico" aria-hidden="true">📷</div><div><span class="c-lbl">Instagram</span><a href="https://instagram.com/cuidomentalfundacion" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram">@cuidomentalfundacion</a></div></div>
+      <div class="c-item"><div class="c-ico" aria-hidden="true">👥</div><div><span class="c-lbl">Facebook</span><a href="#" target="_blank" rel="noopener noreferrer" aria-label="Find us on Facebook">Mental Health Care Foundation</a></div></div>
+      <div class="crisis-card rv" role="alert">
+        <h4 data-t="cr.h">💚 Need immediate help?</h4>
+        <p data-t="cr.p">If you're going through a difficult moment, you're not alone. <strong>Line 106</strong> in Colombia offers free 24/7 psychosocial support.</p>
+      </div>
+    </div>
+    <div class="ai-wrap" id="aiWrap">
+      <div class="ai-hd">
+        <div class="ai-status"><div class="ai-pulse" aria-hidden="true"></div></div>
+        <div><div class="ai-title" data-t="ai.title">Virtual Assistant 💚</div><div class="ai-sub-text" data-t="ai.sub">Ask me about the foundation</div></div>
+      </div>
+      <div class="ai-msgs" id="chatBox" role="log" aria-live="polite" aria-label="Chat messages">
+        <div class="msg bot" id="welcomeMsg">Hello! I'm the Mental Health Care Foundation assistant 🧠 How can I help you today?</div>
+      </div>
+      <div class="ai-chips-row" id="chipsRow" role="group" aria-label="Quick questions">
+        <button class="ai-chip" onclick="sendChip(this)" data-t="cp1">How to volunteer?</button>
+        <button class="ai-chip" onclick="sendChip(this)" data-t="cp2">Workshops offered</button>
+        <button class="ai-chip" onclick="sendChip(this)" data-t="cp3">I need support</button>
+        <button class="ai-chip" onclick="sendChip(this)" data-t="cp4">How to donate?</button>
+      </div>
+      <div class="ai-input-area">
+        <label for="chatInput" class="sr-only">Your message</label>
+        <input class="ai-in" id="chatInput" type="text" placeholder="Type your question…" autocomplete="off" onkeydown="if(event.key==='Enter')sendMsg()" aria-label="Chat input"/>
+        <button class="ai-send" onclick="sendMsg()" aria-label="Send message">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer role="contentinfo">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo"><span aria-hidden="true">🧠</span> Mental Health <span>Care</span></div>
+      <p class="footer-tagline" data-t="ft.tag">"Caring for the mind is caring for life."</p>
+    </div>
+    <div class="footer-col">
+      <h5 data-t="ft.col1">Explore</h5>
+      <ul role="list">
+        <li><a href="#about" data-t="nav.about">About</a></li>
+        <li><a href="#problem" data-t="nav.problem">The Problem</a></li>
+        <li><a href="#community">Community</a></li>
+        <li><a href="#action" data-t="nav.action">Get Involved</a></li>
+        <li><a href="#contact" data-t="nav.contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5 data-t="ft.col2">Connect</h5>
+      <ul role="list">
+        <li><a href="https://instagram.com/cuidomentalfundacion" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        <li><a href="#" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+        <li><a href="mailto:cuidomentalfundacion@gmail.com">Email</a></li>
+        <li><a href="https://wa.me/573160408334" target="_blank" rel="noopener noreferrer">WhatsApp: +57 316 040 8334</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Mental Health Care Foundation · Colombia</p>
+    <div class="footer-soc">
+      <a href="https://instagram.com/cuidomentalfundacion" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="#">Facebook</a>
+      <a href="mailto:cuidomentalfundacion@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ WHATSAPP FLOATING BUTTON ═══ -->
+<a href="https://wa.me/573160408334?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20Mental%20Health%20Care%20Foundation%20%F0%9F%92%9A" target="_blank" rel="noopener noreferrer" class="wa-float" aria-label="Contáctanos por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span class="wa-float-label">WhatsApp</span>
+</a>
+
+<!-- ═══ DONATE MODAL (QR Bancolombia) ═══ -->
+<div id="donate-modal" role="dialog" aria-modal="true" aria-labelledby="dm-title">
+  <div class="dm-inner">
+    <!-- Bancolombia Header -->
+    <div class="dm-header">
+      <div class="dm-header-logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="36" height="36" rx="8" fill="#13202b"/>
+          <text x="18" y="25" text-anchor="middle" font-size="18" fill="#FBBF24">🏦</text>
+        </svg>
+        <div>
+          <div class="dm-logo-text">Bancolombia</div>
+          <div class="dm-logo-sub">Pago seguro</div>
+        </div>
+      </div>
+      <button class="dm-close-btn" id="dm-close" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="dm-body">
+      <h2 class="dm-title" id="dm-title">Apoya la Fundación 💚</h2>
+      <p class="dm-subtitle">Escanea el código QR con tu app Bancolombia o con cualquier billetera digital. Tu donación transforma vidas.</p>
+
+      <!-- QR Code (SVG generado - representativo) -->
+      <div class="dm-qr-wrap">
+        <p class="dm-qr-label">Escanear para donar</p>
+        <div class="dm-qr-svg-wrap">
+          <!-- QR code SVG pattern (representativo / decorativo) -->
+          <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Código QR de pago Bancolombia">
+            <rect width="180" height="180" fill="white"/>
+            <!-- Corner squares -->
+            <!-- Top-left -->
+            <rect x="10" y="10" width="50" height="50" rx="4" fill="#13202b"/>
+            <rect x="16" y="16" width="38" height="38" rx="2" fill="white"/>
+            <rect x="22" y="22" width="26" height="26" rx="1" fill="#13202b"/>
+            <!-- Top-right -->
+            <rect x="120" y="10" width="50" height="50" rx="4" fill="#13202b"/>
+            <rect x="126" y="16" width="38" height="38" rx="2" fill="white"/>
+            <rect x="132" y="22" width="26" height="26" rx="1" fill="#13202b"/>
+            <!-- Bottom-left -->
+            <rect x="10" y="120" width="50" height="50" rx="4" fill="#13202b"/>
+            <rect x="16" y="126" width="38" height="38" rx="2" fill="white"/>
+            <rect x="22" y="132" width="26" height="26" rx="1" fill="#13202b"/>
+            <!-- Data pattern (decorative) -->
+            <rect x="70" y="10" width="8" height="8" fill="#13202b"/>
+            <rect x="82" y="10" width="8" height="8" fill="#13202b"/>
+            <rect x="94" y="10" width="8" height="8" fill="#13202b"/>
+            <rect x="106" y="10" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="22" width="8" height="8" fill="#13202b"/>
+            <rect x="94" y="22" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="34" width="8" height="8" fill="#13202b"/>
+            <rect x="82" y="34" width="8" height="8" fill="#13202b"/>
+            <rect x="106" y="34" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="46" width="8" height="8" fill="#13202b"/>
+            <rect x="94" y="46" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="58" width="8" height="8" fill="#13202b"/>
+            <rect x="82" y="58" width="8" height="8" fill="#13202b"/>
+            <rect x="94" y="58" width="8" height="8" fill="#13202b"/>
+            <rect x="10" y="70" width="8" height="8" fill="#13202b"/>
+            <rect x="22" y="70" width="8" height="8" fill="#13202b"/>
+            <rect x="46" y="70" width="8" height="8" fill="#13202b"/>
+            <rect x="58" y="70" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="70" width="8" height="8" fill="#FBBF24"/>
+            <rect x="82" y="70" width="8" height="8" fill="#13202b"/>
+            <rect x="94" y="70" width="8" height="8" fill="#13202b"/>
+            <rect x="118" y="70" width="8" height="8" fill="#13202b"/>
+            <rect x="130" y="70" width="8" height="8" fill="#13202b"/>
+            <rect x="154" y="70" width="8" height="8" fill="#13202b"/>
+            <rect x="10" y="82" width="8" height="8" fill="#13202b"/>
+            <rect x="34" y="82" width="8" height="8" fill="#13202b"/>
+            <rect x="58" y="82" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="82" width="8" height="8" fill="#13202b"/>
+            <rect x="94" y="82" width="8" height="8" fill="#FBBF24"/>
+            <rect x="106" y="82" width="8" height="8" fill="#13202b"/>
+            <rect x="118" y="82" width="8" height="8" fill="#13202b"/>
+            <rect x="142" y="82" width="8" height="8" fill="#13202b"/>
+            <rect x="166" y="82" width="8" height="8" fill="#13202b"/>
+            <rect x="10" y="94" width="8" height="8" fill="#13202b"/>
+            <rect x="22" y="94" width="8" height="8" fill="#13202b"/>
+            <rect x="46" y="94" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="94" width="8" height="8" fill="#13202b"/>
+            <rect x="82" y="94" width="8" height="8" fill="#FBBF24"/>
+            <rect x="94" y="94" width="8" height="8" fill="#13202b"/>
+            <rect x="118" y="94" width="8" height="8" fill="#13202b"/>
+            <rect x="130" y="94" width="8" height="8" fill="#13202b"/>
+            <rect x="154" y="94" width="8" height="8" fill="#13202b"/>
+            <rect x="10" y="106" width="8" height="8" fill="#13202b"/>
+            <rect x="34" y="106" width="8" height="8" fill="#13202b"/>
+            <rect x="58" y="106" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="106" width="8" height="8" fill="#13202b"/>
+            <rect x="94" y="106" width="8" height="8" fill="#13202b"/>
+            <rect x="106" y="106" width="8" height="8" fill="#13202b"/>
+            <rect x="130" y="106" width="8" height="8" fill="#13202b"/>
+            <rect x="154" y="106" width="8" height="8" fill="#13202b"/>
+            <rect x="166" y="106" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="118" width="8" height="8" fill="#13202b"/>
+            <rect x="82" y="118" width="8" height="8" fill="#FBBF24"/>
+            <rect x="94" y="118" width="8" height="8" fill="#13202b"/>
+            <rect x="106" y="118" width="8" height="8" fill="#13202b"/>
+            <rect x="130" y="118" width="8" height="8" fill="#13202b"/>
+            <rect x="142" y="118" width="8" height="8" fill="#13202b"/>
+            <rect x="166" y="118" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="130" width="8" height="8" fill="#13202b"/>
+            <rect x="94" y="130" width="8" height="8" fill="#13202b"/>
+            <rect x="118" y="130" width="8" height="8" fill="#13202b"/>
+            <rect x="142" y="130" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="142" width="8" height="8" fill="#13202b"/>
+            <rect x="82" y="142" width="8" height="8" fill="#13202b"/>
+            <rect x="106" y="142" width="8" height="8" fill="#13202b"/>
+            <rect x="130" y="142" width="8" height="8" fill="#13202b"/>
+            <rect x="154" y="142" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="154" width="8" height="8" fill="#FBBF24"/>
+            <rect x="94" y="154" width="8" height="8" fill="#13202b"/>
+            <rect x="118" y="154" width="8" height="8" fill="#13202b"/>
+            <rect x="142" y="154" width="8" height="8" fill="#13202b"/>
+            <rect x="166" y="154" width="8" height="8" fill="#13202b"/>
+            <rect x="70" y="166" width="8" height="8" fill="#13202b"/>
+            <rect x="82" y="166" width="8" height="8" fill="#13202b"/>
+            <rect x="106" y="166" width="8" height="8" fill="#13202b"/>
+            <rect x="130" y="166" width="8" height="8" fill="#13202b"/>
+            <rect x="154" y="166" width="8" height="8" fill="#13202b"/>
+            <!-- Center logo mark -->
+            <rect x="78" y="78" width="24" height="24" rx="4" fill="white"/>
+            <rect x="81" y="81" width="18" height="18" rx="2" fill="#FBBF24"/>
+            <text x="90" y="93" text-anchor="middle" font-size="11" fill="#13202b" font-weight="900">B</text>
+          </svg>
+        </div>
+        <div class="dm-account-info">
+          <span class="acc-label">Cuenta de Ahorros</span>
+          <span class="acc-val">Bancolombia · 316 0408334</span>
+        </div>
+      </div>
+
+      <!-- Amount selector -->
+      <div class="dm-amounts" role="group" aria-label="Monto de donación">
+        <button class="dm-amt" onclick="selectAmt(this)">$10.000<span>Básico</span></button>
+        <button class="dm-amt active" onclick="selectAmt(this)">$25.000<span>Popular</span></button>
+        <button class="dm-amt" onclick="selectAmt(this)">$50.000<span>Generoso</span></button>
+        <button class="dm-amt" onclick="selectAmt(this)">$100.000<span>Campeón</span></button>
+      </div>
+
+      <a href="https://wa.me/573160408334?text=Hola%2C%20quiero%20hacer%20una%20donaci%C3%B3n%20a%20Mental%20Health%20Care%20Foundation%20%F0%9F%92%9A" target="_blank" rel="noopener noreferrer">
+        <button class="dm-cta">💛 Confirmar donación por WhatsApp</button>
+      </a>
+      <p class="dm-note">⚠️ Este es un QR de demostración para la fundación. Para donar, contáctanos por WhatsApp o email. · <strong>Línea 106</strong> · Apoyo gratuito 24/7</p>
+    </div>
+  </div>
+</div>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ══════════════════════════════════
+   i18n — complete bilingual system
+══════════════════════════════════ */
+const TRANSLATIONS = {
+  en:{
+    "nav.about":"About","nav.problem":"The Problem","nav.community":"Community","nav.action":"Get Involved","nav.contact":"Contact",
+    "nav.cta.participate":"Get Involved","nav.cta.learn":"Learn More",
+    "hero.eyebrow":"Mental Health Care Foundation · Colombia",
+    "hero.l1":"No one should","hero.l2":"face their struggles","hero.l3":"alone.",
+    "hero.sub":"We promote mental health and emotional well-being for everyone — especially youth and vulnerable communities across Colombia.",
+    "hero.cta1":"Get Involved ↗","hero.cta2":"Learn More",
+    "chip.e":"📚 Education","chip.s":"🤝 Support","chip.p":"💛 Prevention","chip.y":"🎓 Youth",
+    "photo.ey":"Every step leaves a mark","photo.h2em":"a story that can't be erased",
+    "ph.t1":"Community","ph.t2":"Support","ph.t3":"Youth","ph.t4":"Workshops",
+    "about.ey":"About Us","about.h2em":"we are",
+    "about.p1":"Mental Health Care Foundation is a social organization working to improve the emotional well-being of people — especially youth, students, and vulnerable communities.",
+    "about.p2":"We run educational talks, workshops, psychological counseling, and awareness campaigns. Everyone deserves emotional support and access to psychological care.",
+    "mv.mt":"🎯 Mission","mv.mp":"Promote mental health by providing support, education, and resources — reducing the stigma of talking about emotions.",
+    "mv.vt":"🌎 Vision","mv.vp":"A society where mental health is a priority and no one faces their emotional struggles alone.",
+    "at.h1":"Psychologists","at.p1":"Professional orientation and support",
+    "at.h2":"Volunteers","at.p2":"The heart of our community",
+    "at.h3":"Educators","at.p3":"Workshops and formative talks",
+    "at.h4":"Community Leaders","at.p4":"Bridge to local communities",
+    "impact.ey":"Our Impact","impact.h2em":"speak for themselves",
+    "imp.l1":"People reached annually","imp.l2":"Workshops per year","imp.l3":"Active volunteers","imp.l4":"Communities served",
+    "prob.ey":"The Problem","prob.h2em":"matters.",
+    "prob.p":"Many people suffer in silence due to fear, shame, or lack of resources. Young people are among the most affected.",
+    "pb1.h":"Anxiety & Depression","pb1.p":"Millions suffer without receiving care. Fear of stigma keeps them isolated and silent.",
+    "pb2.h":"Pressure on Youth","pb2.p":"Academic stress, family issues, social media and bullying profoundly affect young students.",
+    "pb3.h":"Access Barriers","pb3.p":"Shame, lack of information, and limited resources prevent many from seeking help.",
+    "pb4.h":"Life Impact","pb4.p":"Untreated mental health issues affect relationships, academics, quality of life, and physical health.",
+    "act.ey":"Get Involved","act.h2em":"the change","act.sub":"With your support, we move forward together. Every gesture counts and can transform a life.",
+    "adc1.tag":"Volunteering","adc1.h":"Imagine changing<br/>the future","adc1.p":"Share your energy and transform lives in your community.",
+    "adc2.tag":"Donate","adc2.h":"Support mental<br/>health programs","adc2.p":"Your donation funds workshops, materials, and emotional support programs.",
+    "am1.h":"Volunteer","am1.l1":"Help facilitate workshops","am1.l2":"Support mental health campaigns","am1.l3":"Psychologists offering talks welcome",
+    "am2.h":"Donate","am2.l1":"Psychological workshops","am2.l2":"Educational materials","am2.l3":"Emotional support programs",
+    "am3.h":"Spread the Word","am3.l1":"Share on social media","am3.l2":"Talk about mental health","am3.l3":"Follow @cuidomentalfundacion",
+    "stmt.ey":"With your support, we move forward together","stmt.em":"and leave your mark","stmt.q":'"Talking about mental health can save lives."',
+    "con.ey":"Contact","con.h2em":"together",
+    "cl.email":"Email","cl.phone":"Phone",
+    "cr.h":"💚 Need immediate help?","cr.p":"If you're going through a difficult moment, you're not alone. <strong>Line 106</strong> in Colombia offers free 24/7 psychosocial support.",
+    "ai.title":"Virtual Assistant 🧠","ai.sub":"Ask me about the foundation",
+    "cp1":"How to volunteer?","cp2":"Workshops offered","cp3":"I need support","cp4":"How to donate?",
+    "ai.welcome":"Hello! I'm the Mental Health Care Foundation assistant 🧠 How can I help you today?",
+    "ai.ph":"Type your question…",
+    "ft.tag":'"Caring for the mind is caring for life."',"ft.col1":"Explore","ft.col2":"Connect",
+    // panels
+    "panel.participate.tag":"Get Involved","panel.participate.h1a":"Join the","panel.participate.h1b":"movement",
+    "panel.participate.sub":"Find a way to contribute that matches your passion. Every action, big or small, creates lasting change.",
+    "ps.ed":"Education","ps.ed.c1.h":"Courses","ps.ed.c1.p":"Mental health & emotional well-being",
+    "ps.ed.c2.h":"Workshops","ps.ed.c2.p":"Hands-on learning experiences",
+    "ps.sup":"Support","ps.sup.c1.h":"Psychological Accompaniment","ps.sup.c1.p":"One-on-one and group sessions",
+    "ps.sup.c2.h":"Support Networks","ps.sup.c2.p":"Community circles & peer support",
+    "ps.prev":"Prevention","ps.prev.c1.h":"Community Programs","ps.prev.c1.p":"Outreach and awareness initiatives",
+    "ps.prev.c2.h":"Educational Talks","ps.prev.c2.p":"Expert speakers & guest sessions",
+    "ps.youth":"Youth","ps.youth.c1.h":"Youth Activities","ps.youth.c1.p":"Creative and expressive spaces",
+    "ps.youth.c2.h":"Safe Spaces","ps.youth.c2.p":"Non-judgmental environments",
+    "ps.vol":"Volunteer","ps.vol.c1.h":"Become a Volunteer","ps.vol.c1.p":"Give your time & skills",
+    "ps.vol.c2.h":"Donate","ps.vol.c2.p":"Fund life-changing programs",
+    "panel.about.tag":"About Us","panel.about.h1a":"Our","panel.about.h1b":"story",
+    "panel.about.sub":"A Colombian non-profit built on empathy, community, and the belief that no one should face their mental health struggles alone.",
+    "pa.who":"Who We Are","pa.who.c1.h":"Mission","pa.who.c1.p":"Promote mental health for all",
+    "pa.who.c2.h":"Vision","pa.who.c2.p":"A stigma-free Colombia",
+    "pa.who.c3.h":"Our History","pa.who.c3.p":"Years of grassroots work, community programs, and impact across Colombia's most vulnerable regions.",
+    "pa.team":"Our Team","pa.team.t1.h":"Psychologists","pa.team.t1.p":"Professional mental health guidance",
+    "pa.team.t2.h":"Volunteers","pa.team.t2.p":"The heart of our community",
+    "pa.team.t3.h":"Educators","pa.team.t3.p":"Workshops and formative talks",
+    "pa.team.t4.h":"Community Leaders","pa.team.t4.p":"Bridge to local communities",
+    "pa.gallery":"Gallery",
+  },
+  es:{
+    "nav.about":"Nosotros","nav.problem":"El Problema","nav.community":"Comunidad","nav.action":"Participa","nav.contact":"Contacto",
+    "nav.cta.participate":"Participa","nav.cta.learn":"Conoce más",
+    "hero.eyebrow":"Mental Health Care Foundation · Colombia",
+    "hero.l1":"Nadie debería","hero.l2":"enfrentar sus luchas","hero.l3":"solo.",
+    "hero.sub":"Promovemos la salud mental y el bienestar emocional para todos — especialmente para jóvenes y comunidades vulnerables en Colombia.",
+    "hero.cta1":"Participa ↗","hero.cta2":"Conoce más",
+    "chip.e":"📚 Educación","chip.s":"🤝 Apoyo","chip.p":"💛 Prevención","chip.y":"🎓 Jóvenes",
+    "photo.ey":"Cada paso marca una huella","photo.h2em":"una historia que no se borra",
+    "ph.t1":"Comunidad","ph.t2":"Apoyo","ph.t3":"Jóvenes","ph.t4":"Talleres",
+    "about.ey":"Sobre Nosotros","about.h2em":"quiénes somos",
+    "about.p1":"Mental Health Care Foundation es una organización social que trabaja para mejorar el bienestar emocional de las personas, especialmente jóvenes, estudiantes y comunidades vulnerables.",
+    "about.p2":"Realizamos charlas educativas, talleres, orientación psicológica y campañas de concientización. Todas las personas merecen apoyo emocional y acceso a ayuda psicológica.",
+    "mv.mt":"🎯 Misión","mv.mp":"Promover la salud mental brindando apoyo, educación y recursos, reduciendo el estigma de hablar sobre emociones.",
+    "mv.vt":"🌎 Visión","mv.vp":"Una sociedad donde la salud mental sea prioridad y nadie enfrente sus luchas emocionales solo.",
+    "at.h1":"Psicólogos","at.p1":"Orientación y apoyo profesional",
+    "at.h2":"Voluntarios","at.p2":"El corazón de nuestra comunidad",
+    "at.h3":"Educadores","at.p3":"Talleres y charlas formativas",
+    "at.h4":"Líderes Comunitarios","at.p4":"Puente con las comunidades locales",
+    "impact.ey":"Nuestro Impacto","impact.h2em":"hablan por sí solos",
+    "imp.l1":"Personas alcanzadas al año","imp.l2":"Talleres por año","imp.l3":"Voluntarios activos","imp.l4":"Comunidades atendidas",
+    "prob.ey":"El Problema","prob.h2em":"importa.",
+    "prob.p":"Muchas personas sufren en silencio por miedo, vergüenza o falta de recursos. Los jóvenes son uno de los grupos más afectados.",
+    "pb1.h":"Ansiedad y Depresión","pb1.p":"Millones padecen sin recibir atención. El miedo al estigma los lleva al silencio.",
+    "pb2.h":"Presión en Jóvenes","pb2.p":"Presión académica, problemas familiares, redes sociales y bullying afectan gravemente a estudiantes.",
+    "pb3.h":"Barreras de Acceso","pb3.p":"La vergüenza, falta de información y escasez de recursos impiden buscar ayuda.",
+    "pb4.h":"Impacto en la Vida","pb4.p":"La salud mental no atendida afecta relaciones, rendimiento académico, calidad de vida y salud física.",
+    "act.ey":"Participa","act.h2em":"el cambio","act.sub":"Con tu apoyo, avanzamos juntos. Cada gesto cuenta y puede transformar una vida.",
+    "adc1.tag":"Voluntariado","adc1.h":"Imagina cambiar<br/>el futuro","adc1.p":"Comparte tu energía y transforma vidas en tu comunidad.",
+    "adc2.tag":"Donar","adc2.h":"Apoya los programas<br/>de salud mental","adc2.p":"Tu donación financia talleres, materiales y programas de apoyo emocional.",
+    "am1.h":"Voluntariado","am1.l1":"Ayudar en talleres","am1.l2":"Apoyar campañas","am1.l3":"Psicólogos que deseen dar charlas",
+    "am2.h":"Donaciones","am2.l1":"Talleres psicológicos","am2.l2":"Materiales educativos","am2.l3":"Programas de apoyo emocional",
+    "am3.h":"Difunde el Mensaje","am3.l1":"Compartir en redes","am3.l2":"Hablar de salud mental","am3.l3":"Síguenos @cuidomentalfundacion",
+    "stmt.ey":"Con tu apoyo, avanzamos juntos","stmt.em":"y deja tu huella","stmt.q":'"Hablar de salud mental puede salvar vidas."',
+    "con.ey":"Contacto","con.h2em":"juntos",
+    "cl.email":"Correo","cl.phone":"Teléfono",
+    "cr.h":"💚 ¿Necesitas ayuda inmediata?","cr.p":"Si estás pasando por un momento difícil, no estás solo. La <strong>Línea 106</strong> en Colombia ofrece apoyo psicosocial gratuito las 24 horas.",
+    "ai.title":"Asistente Virtual 🧠","ai.sub":"Pregúntame sobre la fundación",
+    "cp1":"¿Cómo ser voluntario?","cp2":"Talleres disponibles","cp3":"Necesito apoyo","cp4":"¿Cómo donar?",
+    "ai.welcome":"¡Hola! Soy el asistente de Mental Health Care Foundation 🧠 ¿En qué puedo ayudarte hoy?",
+    "ai.ph":"Escribe tu pregunta…",
+    "ft.tag":'"Cuidar la mente es cuidar la vida."',"ft.col1":"Explorar","ft.col2":"Conectar",
+    "panel.participate.tag":"Participa","panel.participate.h1a":"Únete al","panel.participate.h1b":"movimiento",
+    "panel.participate.sub":"Encuentra una forma de contribuir que vaya con tu pasión. Cada acción, grande o pequeña, crea un cambio duradero.",
+    "ps.ed":"Educación","ps.ed.c1.h":"Cursos","ps.ed.c1.p":"Salud mental y bienestar emocional",
+    "ps.ed.c2.h":"Talleres","ps.ed.c2.p":"Experiencias de aprendizaje práctico",
+    "ps.sup":"Apoyo","ps.sup.c1.h":"Acompañamiento Psicológico","ps.sup.c1.p":"Sesiones individuales y grupales",
+    "ps.sup.c2.h":"Redes de Apoyo","ps.sup.c2.p":"Círculos comunitarios y apoyo entre pares",
+    "ps.prev":"Prevención","ps.prev.c1.h":"Programas Comunitarios","ps.prev.c1.p":"Iniciativas de divulgación y conciencia",
+    "ps.prev.c2.h":"Charlas Educativas","ps.prev.c2.p":"Expertos y sesiones especiales",
+    "ps.youth":"Jóvenes","ps.youth.c1.h":"Actividades Juveniles","ps.youth.c1.p":"Espacios creativos y expresivos",
+    "ps.youth.c2.h":"Espacios Seguros","ps.youth.c2.p":"Entornos sin prejuicios",
+    "ps.vol":"Voluntariado","ps.vol.c1.h":"Sé Voluntario","ps.vol.c1.p":"Da tu tiempo y habilidades",
+    "ps.vol.c2.h":"Dona","ps.vol.c2.p":"Financia programas que cambian vidas",
+    "panel.about.tag":"Sobre Nosotros","panel.about.h1a":"Nuestra","panel.about.h1b":"historia",
+    "panel.about.sub":"Una organización colombiana construida sobre empatía, comunidad y la convicción de que nadie debería enfrentar solo sus luchas de salud mental.",
+    "pa.who":"Quiénes Somos","pa.who.c1.h":"Misión","pa.who.c1.p":"Promover la salud mental para todos",
+    "pa.who.c2.h":"Visión","pa.who.c2.p":"Una Colombia sin estigma",
+    "pa.who.c3.h":"Nuestra Historia","pa.who.c3.p":"Años de trabajo comunitario, programas de impacto y presencia en las regiones más vulnerables de Colombia.",
+    "pa.team":"Nuestro Equipo","pa.team.t1.h":"Psicólogos","pa.team.t1.p":"Orientación profesional de salud mental",
+    "pa.team.t2.h":"Voluntarios","pa.team.t2.p":"El corazón de nuestra comunidad",
+    "pa.team.t3.h":"Educadores","pa.team.t3.p":"Talleres y charlas formativas",
+    "pa.team.t4.h":"Líderes Comunitarios","pa.team.t4.p":"Puente con las comunidades locales",
+    "pa.gallery":"Galería",
+  }
+};
+
+let currentLang = 'en';
+
+function applyTranslations(lang) {
+  const d = TRANSLATIONS[lang];
+  if(!d) return;
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.dataset.t;
+    if(d[key] !== undefined) el.innerHTML = d[key];
+  });
+  // Hero words separately to preserve structure
+  const words = document.querySelectorAll('.hero-h1 .wi');
+  ['hero.l1','hero.l2','hero.l3'].forEach((k,i)=>{if(words[i])words[i].innerHTML=d[k]||'';});
+  // Input placeholder
+  const input = document.getElementById('chatInput');
+  if(input) input.placeholder = d['ai.ph'] || '';
+  // Welcome message
+  const wm = document.getElementById('welcomeMsg');
+  if(wm) wm.textContent = d['ai.welcome'] || '';
+  document.documentElement.lang = lang;
+  document.documentElement.dataset.lang = lang;
+  buildMarquee();
+}
+
+/* setLang is defined later with mobile nav sync */
+
+/* Custom cursor removed — using clean default cursor */
+
+/* ══════════════════════════════════
+   PANEL SYSTEM
+══════════════════════════════════ */
+const overlay  = document.getElementById('overlay');
+const panelP   = document.getElementById('panel-participate');
+const panelA   = document.getElementById('panel-about');
+const closePP  = document.getElementById('close-pp');
+const closePA  = document.getElementById('close-pa');
+
+function openPanel(panel, triggerBtn) {
+  closeAllPanels();
+  overlay.classList.add('active');
+  panel.classList.add('open');
+  if(triggerBtn) triggerBtn.setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+  panel.querySelector('.panel-close').focus();
+  // animate cards in
+  gsap.fromTo(panel.querySelectorAll('.p-card,.team-item'),
+    {opacity:0, y:20},
+    {opacity:1, y:0, duration:.4, stagger:.06, ease:'power2.out', delay:.2}
+  );
+}
+
+function closeAllPanels() {
+  overlay.classList.remove('active');
+  panelP.classList.remove('open');
+  panelA.classList.remove('open');
+  document.body.style.overflow = '';
+  document.querySelectorAll('[aria-expanded="true"]').forEach(b=>b.setAttribute('aria-expanded','false'));
+}
+
+// Participate triggers (desktop + mobile)
+['nav-participate','hero-participate','mob-participate'].forEach(id => {
+  const btn = document.getElementById(id);
+  if(btn) btn.addEventListener('click', () => openPanel(panelP, btn));
+});
+// Learn more triggers (desktop + mobile)
+['nav-learn','hero-learn','mob-learn'].forEach(id => {
+  const btn = document.getElementById(id);
+  if(btn) btn.addEventListener('click', () => openPanel(panelA, btn));
+});
+
+closePP.addEventListener('click', closeAllPanels);
+closePA.addEventListener('click', closeAllPanels);
+overlay.addEventListener('click', closeAllPanels);
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeAllPanels(); });
+
+// P-cards as buttons
+document.querySelectorAll('.p-card[role="button"]').forEach(card => {
+  card.addEventListener('click', () => { card.style.background='rgba(0,180,180,.18)'; setTimeout(()=>card.style.background='',300); });
+  card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') card.click(); });
+});
+
+/* ══════════════════════════════════
+   NAV
+══════════════════════════════════ */
+ScrollTrigger.create({
+  start: 'top -60', end: 99999,
+  toggleClass: { className:'filled', targets:'#main-nav' }
+});
+// Always fill nav on mobile so it's readable
+if(window.innerWidth <= 768) document.getElementById('main-nav').classList.add('filled');
+
+/* ══════════════════════════════════
+   HERO ENTRANCE
+══════════════════════════════════ */
+const htl = gsap.timeline({ defaults:{ ease:'expo.out' } });
+htl
+  .to('#h-ey',  { opacity:1, y:0, duration:.7, delay:.25 })
+  .to('.hero-h1 .wi', { y:'0%', duration:1.1, stagger:.14, ease:'power4.out' }, '-=.4')
+  .to('#h-sub',  { opacity:1, y:0, duration:.8 }, '-=.6')
+  .to('#h-chips',{ opacity:1, y:0, duration:.6 }, '-=.55')
+  .to('#h-ctas', { opacity:1, y:0, duration:.6 }, '-=.5')
+  .to('#hero-svg',{ opacity:1, duration:.7 }, '-=.4');
+
+// Person floating animation
+gsap.utils.toArray(['#p1','#p2','#p3','#p4','#p5']).forEach((p, i) => {
+  gsap.to(p, { y: -10, duration: 2.2 + i * 0.3, repeat:-1, yoyo:true, ease:'sine.inOut', delay: i * 0.25 });
+});
+
+/* ══════════════════════════════════
+   MARQUEE
+══════════════════════════════════ */
+const MQ_ITEMS = {
+  en:['Mental Health Awareness','No One Alone','Break the Stigma','Emotional Well-being','Community Support','Youth Programs','Suicide Prevention','Psychological Counseling'],
+  es:['Salud Mental','Nadie Solo','Sin Estigma','Bienestar Emocional','Apoyo Comunitario','Programas Juveniles','Prevención','Orientación Psicológica']
+};
+function buildMarquee() {
+  const track = document.getElementById('mq-track');
+  const items = [...MQ_ITEMS[currentLang], ...MQ_ITEMS[currentLang]];
+  track.innerHTML = items.map(t=>`<span class="mq-item">${t}<span class="mq-dot" aria-hidden="true"></span></span>`).join('');
+}
+buildMarquee();
+
+/* ══════════════════════════════════
+   SCROLL REVEALS
+══════════════════════════════════ */
+// Generic .rv
+gsap.utils.toArray('.rv').forEach(el => {
+  gsap.to(el, { opacity:1, y:0, duration:.9, ease:'power3.out',
+    scrollTrigger:{ trigger:el, start:'top 86%' }
+  });
+});
+// .rv-l
+gsap.utils.toArray('.rv-l').forEach(el => {
+  gsap.to(el, { opacity:1, x:0, duration:.95, ease:'power3.out',
+    scrollTrigger:{ trigger:el, start:'top 80%' }
+  });
+});
+// .rv-r
+gsap.utils.toArray('.rv-r').forEach(el => {
+  gsap.to(el, { opacity:1, x:0, duration:.95, ease:'power3.out',
+    scrollTrigger:{ trigger:el, start:'top 80%' }
+  });
+});
+// .rv-s
+gsap.utils.toArray('.rv-s').forEach(el => {
+  gsap.to(el, { opacity:1, scale:1, duration:1, ease:'power3.out',
+    scrollTrigger:{ trigger:el, start:'top 82%' }
+  });
+});
+
+// Photo items
+gsap.to('.photo-item', {
+  opacity:1, y:0, duration:.8, stagger:.12, ease:'power3.out',
+  scrollTrigger:{ trigger:'.photo-grid', start:'top 82%' }
+});
+
+// About team cards
+gsap.to('.at-card', {
+  opacity:1, y:0, duration:.65, stagger:.1, ease:'back.out(1.3)',
+  scrollTrigger:{ trigger:'.about-team-grid', start:'top 82%' }
+});
+
+// Impact counters
+document.querySelectorAll('[data-count]').forEach(el => {
+  const target = +el.dataset.count;
+  const suffix = target >= 100 ? '+' : (target === 1 ? ' in' : '%');
+  const display = target >= 100 ? target : target;
+  ScrollTrigger.create({
+    trigger: el, start:'top 88%', once:true,
+    onEnter: () => {
+      gsap.fromTo(el, { innerText:0 }, {
+        innerText: display, duration: 2.2, ease:'power2.out',
+        snap:{ innerText:1 },
+        onUpdate() { el.innerText = Math.round(+el.innerText) + (target>=100?'+':''); }
+      });
+    }
+  });
+});
+
+// Problem items
+gsap.to('.prob-item', {
+  opacity:1, x:0, duration:.7, stagger:.12, ease:'power3.out',
+  scrollTrigger:{ trigger:'.prob-list', start:'top 80%' }
+});
+
+// Action cards
+gsap.to('.action-duo-card', {
+  opacity:1, y:0, duration:.9, stagger:.15, ease:'expo.out',
+  scrollTrigger:{ trigger:'.action-duo', start:'top 80%' }
+});
+gsap.to('.am-card', {
+  opacity:1, y:0, duration:.7, stagger:.12, ease:'back.out(1.2)',
+  scrollTrigger:{ trigger:'.action-thirds', start:'top 82%' }
+});
+
+// Contact items
+gsap.to('.c-item', {
+  opacity:1, x:0, duration:.7, stagger:.1, ease:'power3.out',
+  scrollTrigger:{ trigger:'.contact-lines', start:'top 80%' }
+});
+gsap.to('#aiWrap', {
+  opacity:1, y:0, duration:.9, ease:'power3.out',
+  scrollTrigger:{ trigger:'#aiWrap', start:'top 85%' }
+});
+
+// 3D tilt on action duo cards
+document.querySelectorAll('.action-duo-card').forEach(c => {
+  c.addEventListener('mousemove', e => {
+    const r = c.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width - .5) * 10;
+    const y = ((e.clientY - r.top) / r.height - .5) * -10;
+    gsap.to(c, { rotateY:x, rotateX:y, transformPerspective:900, duration:.35, ease:'power2.out' });
+  });
+  c.addEventListener('mouseleave', () => gsap.to(c, { rotateY:0, rotateX:0, duration:.6, ease:'elastic.out(1,.4)' }));
+});
+
+/* ══════════════════════════════════
+   AI CHAT
+══════════════════════════════════ */
+const SYS_EN = `You are the virtual assistant of Mental Health Care Foundation, a Colombian non-profit organization.
+FOUNDATION: Promotes mental health & emotional well-being; serves youth, students, vulnerable communities; runs talks, workshops, psychological counseling, campaigns.
+TEAM: Psychologists, volunteers, educators, community leaders.
+PILLARS: Education, Community psychological support, Suicide prevention, Youth & student programs.
+HOW TO HELP: Volunteering (workshops, campaigns, talks), Donations (workshops, materials, support programs), Awareness (social media).
+CONTACT: cuidomentalfundacion@gmail.com | +57 300 000 0000 | @cuidomentalfundacion (IG) | Facebook: Mental Health Care Foundation
+RULES: Reply warmly and empathetically in English. If someone expresses distress, validate emotions and mention Line 106 (Colombia, free 24/7 psychosocial support). Max 3–4 sentences. Never invent information.`;
+
+const SYS_ES = `Eres el asistente virtual de Mental Health Care Foundation, una organización sin ánimo de lucro de Colombia.
+FUNDACIÓN: Promueve salud mental y bienestar emocional; atiende jóvenes, estudiantes, comunidades vulnerables; charlas, talleres, orientación psicológica, campañas.
+EQUIPO: Psicólogos, voluntarios, educadores, líderes comunitarios.
+PILARES: Educación, Apoyo psicológico comunitario, Prevención del suicidio, Programas juveniles.
+CÓMO AYUDAR: Voluntariado, Donaciones, Difusión.
+CONTACTO: cuidomentalfundacion@gmail.com | +57 300 000 0000 | @cuidomentalfundacion | Facebook: Mental Health Care Foundation
+REGLAS: Responde en español, tono cálido y empático. Si hay angustia, valida emociones y menciona Línea 106 (gratis 24/7). Máx 3-4 oraciones.`;
+
+const chatBox = document.getElementById('chatBox');
+const chatInput = document.getElementById('chatInput');
+let chatHistory = [];
+
+function addMessage(text, type) {
+  const d = document.createElement('div');
+  d.className = 'msg ' + type;
+  d.innerHTML = text;
+  gsap.fromTo(d, { opacity:0, y:14 }, { opacity:1, y:0, duration:.38, ease:'power2.out' });
+  chatBox.appendChild(d);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+function showTyping() {
+  const d = document.createElement('div');
+  d.className = 'msg typing'; d.id = 'typing-ind';
+  d.innerHTML = '<div class="td"></div><div class="td"></div><div class="td"></div>';
+  gsap.fromTo(d, {opacity:0}, {opacity:1, duration:.2});
+  chatBox.appendChild(d);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+function hideTyping() { const t=document.getElementById('typing-ind'); if(t) t.remove(); }
+
+async function sendMsg() {
+  const text = chatInput.value.trim();
+  if(!text) return;
+  chatInput.value = '';
+  document.getElementById('chipsRow').style.display = 'none';
+  addMessage(text, 'user');
+  chatHistory.push({ role:'user', content:text });
+  showTyping();
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system: currentLang==='en' ? SYS_EN : SYS_ES,
+        messages: chatHistory
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || (currentLang==='en'
+      ? 'Sorry, there was an error. Please email us at cuidomentalfundacion@gmail.com 💚'
+      : 'Lo siento, hubo un error. Escríbenos a cuidomentalfundacion@gmail.com 💚');
+    hideTyping();
+    addMessage(reply, 'bot');
+    chatHistory.push({ role:'assistant', content:reply });
+  } catch(e) {
+    hideTyping();
+    addMessage(currentLang==='en'
+      ? 'Connection error. Please email cuidomentalfundacion@gmail.com 💚'
+      : 'Error de conexión. Escríbenos a cuidomentalfundacion@gmail.com 💚', 'bot');
+  }
+}
+function sendChip(btn) { chatInput.value = btn.textContent; sendMsg(); }
+
+
+/* ══════════════════════════════════
+   IMAGE MODAL
+══════════════════════════════════ */
+const imgModal    = document.getElementById('img-modal');
+const imgModalImg = document.getElementById('img-modal-img');
+const imgModalCap = document.getElementById('img-modal-caption');
+
+let modalImages = [];
+let modalIndex  = 0;
+
+function buildModalImageList() {
+  modalImages = Array.from(document.querySelectorAll('[onclick^="openModal"]')).map(el => {
+    const m = el.getAttribute('onclick').match(/openModal\('([^']+)',\s*'([^']+)'\)/);
+    return m ? { src: m[1], caption: m[2] } : null;
+  }).filter(Boolean);
+}
+
+function openModal(src, caption) {
+  buildModalImageList();
+  const idx = modalImages.findIndex(i => i.src === src);
+  modalIndex = idx >= 0 ? idx : 0;
+  imgModalImg.src = src;
+  imgModalImg.alt = caption;
+  imgModalCap.textContent = caption;
+  imgModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.addEventListener('keydown', _modalKeyHandler);
+}
+
+function closeModal() {
+  imgModal.classList.remove('open');
+  document.body.style.overflow = '';
+  document.removeEventListener('keydown', _modalKeyHandler);
+  // Clear src after transition so no ghost image
+  setTimeout(() => { if(!imgModal.classList.contains('open')) imgModalImg.src = ''; }, 400);
+}
+
+function modalNav(dir) {
+  if(modalImages.length === 0) return;
+  modalIndex = (modalIndex + dir + modalImages.length) % modalImages.length;
+  _showModalImage(modalIndex);
+}
+
+function _showModalImage(idx) {
+  const item = modalImages[idx];
+  if (!item) return;
+  gsap.to('#img-modal-inner', { opacity:0, scale:.95, duration:.18, onComplete: () => {
+    imgModalImg.src = item.src;
+    imgModalImg.alt = item.caption;
+    imgModalCap.textContent = item.caption;
+    gsap.fromTo('#img-modal-inner', {opacity:0,scale:.95},{opacity:1,scale:1,duration:.32,ease:'back.out(1.4)'});
+  }});
+}
+
+function _modalKeyHandler(e) {
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowRight') modalNav(1);
+  if (e.key === 'ArrowLeft')  modalNav(-1);
+}
+
+// Click backdrop (the modal bg itself, not inner) to close
+imgModal.addEventListener('click', e => {
+  if(e.target === imgModal) closeModal();
+});
+
+// Touch swipe support for mobile
+let _touchStartX = 0;
+imgModal.addEventListener('touchstart', e => { _touchStartX = e.touches[0].clientX; }, { passive:true });
+imgModal.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - _touchStartX;
+  if(Math.abs(dx) > 50) { modalNav(dx < 0 ? 1 : -1); }
+}, { passive:true });
+
+/* ══════════════════════════════════
+   COMMUNITY SCROLL REVEALS
+══════════════════════════════════ */
+gsap.to('.cm-photo', {
+  opacity:1, y:0, duration:.85, stagger:.1, ease:'power3.out',
+  scrollTrigger:{ trigger:'.community-gallery', start:'top 82%' }
+});
+gsap.to('.cm-testimonial', {
+  opacity:0.999, y:0, duration:.7, stagger:.12, ease:'power3.out',
+  scrollTrigger:{ trigger:'.community-testimonials', start:'top 85%' }
+});
+gsap.to('.cm-event', {
+  opacity:0.999, y:0, duration:.7, stagger:.12, ease:'power3.out',
+  scrollTrigger:{ trigger:'.cm-events-grid', start:'top 85%' }
+});
+
+
+
+/* ══════════════════════════════════
+   ACTIVE NAV HIGHLIGHTING
+══════════════════════════════════ */
+const navSections = ['home','about','problem','community','action','contact'];
+const navLinks = document.querySelectorAll('.nav-links a');
+
+function updateActiveNav() {
+  let current = '';
+  navSections.forEach(id => {
+    const el = document.getElementById(id);
+    if(el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  navLinks.forEach(a => {
+    const href = a.getAttribute('href');
+    a.classList.toggle('nav-active', href === '#' + current);
+  });
+}
+window.addEventListener('scroll', updateActiveNav, { passive: true });
+updateActiveNav();
+
+/* ══════════════════════════════════
+   HAMBURGER MENU
+══════════════════════════════════ */
+const hamburger  = document.getElementById('hamburger');
+const mobileNav  = document.getElementById('mobile-nav');
+
+function openMobileNav() {
+  hamburger.classList.add('open');
+  mobileNav.classList.add('open');
+  hamburger.setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileNav() {
+  hamburger.classList.remove('open');
+  mobileNav.classList.remove('open');
+  hamburger.setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+}
+hamburger.addEventListener('click', () => {
+  if(mobileNav.classList.contains('open')) closeMobileNav();
+  else openMobileNav();
+});
+// Close on ESC
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeMobileNav();
+});
+
+// Sync mobile lang toggle with desktop
+const bEN_m = document.getElementById('bEN_m');
+const bES_m = document.getElementById('bES_m');
+const _origSetLang = setLang;
+function setLang(lang) {
+  currentLang = lang;
+  // Desktop
+  document.getElementById('bEN').classList.toggle('active', lang==='en');
+  document.getElementById('bES').classList.toggle('active', lang==='es');
+  document.getElementById('bEN').setAttribute('aria-pressed', String(lang==='en'));
+  document.getElementById('bES').setAttribute('aria-pressed', String(lang==='es'));
+  // Mobile
+  if(bEN_m) bEN_m.classList.toggle('active', lang==='en');
+  if(bES_m) bES_m.classList.toggle('active', lang==='es');
+  applyTranslations(lang);
+}
+
+/* init */
+applyTranslations('en');
+
+/* ══════════════════════════════════
+   DONATE MODAL (QR Bancolombia)
+══════════════════════════════════ */
+const donateModal = document.getElementById('donate-modal');
+const dmClose     = document.getElementById('dm-close');
+
+function openDonateModal() {
+  donateModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.addEventListener('keydown', _dmKeyHandler);
+}
+function closeDonateModal() {
+  donateModal.classList.remove('open');
+  document.body.style.overflow = '';
+  document.removeEventListener('keydown', _dmKeyHandler);
+}
+function _dmKeyHandler(e) { if(e.key === 'Escape') closeDonateModal(); }
+function selectAmt(btn) {
+  document.querySelectorAll('.dm-amt').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+dmClose.addEventListener('click', closeDonateModal);
+donateModal.addEventListener('click', e => { if(e.target === donateModal) closeDonateModal(); });
+
+/* ══════════════════════════════════
+   ANIMATE PANEL DETAIL ROWS
+══════════════════════════════════ */
+// Override openPanel to also animate p-detail-row elements
+const _origOpenPanel = openPanel;
+// patch: also animate .p-detail-row when panel opens
+document.querySelectorAll('.side-panel').forEach(panel => {
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(m => {
+      if(m.attributeName === 'class' && panel.classList.contains('open')) {
+        gsap.fromTo(panel.querySelectorAll('.p-detail-row'),
+          {opacity:0, x:18},
+          {opacity:1, x:0, duration:.45, stagger:.06, ease:'power2.out', delay:.25}
+        );
+        gsap.fromTo(panel.querySelectorAll('.panel-cta-btn'),
+          {opacity:0, y:14},
+          {opacity:1, y:0, duration:.5, stagger:.07, ease:'back.out(1.3)', delay:.5}
+        );
+      }
+    });
+  });
+  observer.observe(panel, { attributes: true });
+});
+</script>
+</body>
+</html>
